@@ -1,0 +1,23 @@
+#include "mode.h"
+typedef map<string,int> mp;
+mp st;
+const int scale = 6;
+string input;
+int main(int argc, char *argv[])
+{
+    setIO("2048");
+    int a;
+    cin>>a>>input;
+    for(int i = 0;i<input.length();++i){
+     string res;
+     for(int j = i;j<i+scale && j < input.length();++j)
+      res += input[j];
+     st[res] = 1;
+    }
+    cout<<st.size()<<endl;
+    for(mp::iterator i = st.begin();i != st.end();++i){
+     cout<<(*i).X<<endl;
+    }
+    closeIO();
+    return EXIT_SUCCESS;
+}

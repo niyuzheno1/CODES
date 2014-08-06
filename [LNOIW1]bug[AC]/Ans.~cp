@@ -1,0 +1,97 @@
+#include "mode.h"
+#define MN 1<<26-1
+#define MK 1010
+typedef long long ll;
+
+int res[10];
+int ans[6][6];
+int a[MK][MK],n,tot;
+char str[MK];
+void nex(int & x,int & y,int k){
+ ++y;
+ if(y > k)
+  y= 1,++x;
+}
+struct Trie{
+       int cnt;
+       int ch[2];
+};
+Trie p[MN];
+bool inc(int & x,int y){
+ int exist = 1;
+ if(!p[x].ch[y]) exist = 0,p[x].ch[y] = ++tot;
+ x = p[x].ch[y];
+ return exist;
+}
+void find(int x,int y){
+ if(!p[x].ch[y]) p[x].ch[y] = ++tot;
+ ++p[x].cnt;
+ x = p[x].ch[y];
+}
+int main(int argc, char *argv[])
+{
+    setIO("sample");
+    scanf("%d",&n);
+    tot = 1;
+    for(int i = 1;i<=n;++i){
+     gets(str+1);
+     for(int j = 1;j<=n;++j)
+      if(str[j] == '1') a[i][j] = 1;
+    }
+    bool flag = 0;
+    for(int k = 1;k<=5;++k){
+     for(int i = 1;i<=tot;++i)
+      p[i].cnt = p[i].ch[0]=p[i].ch[1] = 0;
+     tot = 1;
+     for(int i = 1;i<=n-k+1;++i)
+      for(int j = 1;j<=n-k+1;++j){
+       CLEAR(res,0);
+       for(int u = i;u<=i+k-1;++u)
+        for(int v = j;v<=j+k-1;++v){
+          for(int x = 1;x<=8;++x)
+           res[x] *= 2;
+          res[1] += a[u][v];
+          res[2] += a[i+k-1-(u-i+1)+1][v];
+          res[3] += a[u][j+k-1-(v-j+1)+1];
+          res[4] += a[i+k-1-(u-i+1)+1][j+k-1-(v-j+1)+1];
+          res[5] += a[v][u];
+          res[6] += a[v][i+k-1-(u-i+1)+1];
+          res[7] += a[j+k-1-(v-j+1)+1][u];
+          res[8] += a[j+k-1-(v-j+1)+1][i+k-1-(u-i+1)+1];
+        }
+        for(int o = 1;o<=8;++o){
+         int tu = 1;
+         int p = 0;
+         for(int u = k*k-1;u>=0;--u)
+          p = inc(tu,(res[o]>>u)&1);
+         tu = 1;
+         if(!p)
+          for(int u = k*k-1;u>=0;--u)
+           find(tu,(res[o]>>u)&1);
+          
+        }
+      }
+      if(p[1].cnt < (1<<(k*k)))
+      {
+       flag = 1;
+       int now = 1;
+       int x = 1,y = 1;
+       for(int u = k*k;u>=1;--u){
+        if(p[p[now].ch[0]].cnt < (1<<(u-1)))
+          now = p[now].ch[0],ans[x][y] = 0;
+        else
+          now = p[now].ch[1],ans[x][y] = 1;
+        nex(x,y,k);
+       }
+      }
+      if(flag){
+      printf("%d\n",k);
+      for(int i = 1;i<=k;printf("\n"),++i)
+       for(int j = 1;j<=k;++j)
+        printf("%d",ans[i][j]);
+     }
+     if(flag) break;
+    }
+    closeIO();
+    return EXIT_SUCCESS;
+}
