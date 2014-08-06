@@ -1,30 +1,30 @@
-# Project: test
+# Project: ans2
 # Makefile created by Dev-C++ 4.9.9.2
 
-CPP  = g++.exe
-CC   = gcc.exe
+CPP  = g++.exe -D__DEBUG__
+CC   = gcc.exe -D__DEBUG__
 WINDRES = windres.exe
 RES  = 
-OBJ  = test.o $(RES)
-LINKOBJ  = test.o $(RES)
-LIBS =  -L"C:/MinGw/lib"  
+OBJ  = ans2.o $(RES)
+LINKOBJ  = ans2.o $(RES)
+LIBS =  -L"C:/MinGw/lib"  -g3 
 INCS =  -I"D:/Dev-Cpp/include" 
 CXXINCS =  -I"D:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"D:/Dev-Cpp/include/c++/3.4.2/backward"  -I"D:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"D:/Dev-Cpp/include/c++/3.4.2"  -I"D:/Dev-Cpp/include" 
-BIN  = test.exe
-CXXFLAGS = $(CXXINCS)  
-CFLAGS = $(INCS)  
+BIN  = ans2.exe
+CXXFLAGS = $(CXXINCS)   -g3
+CFLAGS = $(INCS)   -g3
 RM = rm -f
 
 .PHONY: all all-before all-after clean clean-custom
 
-all: all-before test.exe all-after
+all: all-before ans2.exe all-after
 
 
 clean: clean-custom
 	${RM} $(OBJ) $(BIN)
 
 $(BIN): $(OBJ)
-	$(CPP) $(LINKOBJ) -o "test.exe" $(LIBS)
+	$(CPP) $(LINKOBJ) -o "ans2.exe" $(LIBS)
 
-test.o: test.cpp
-	$(CPP) -c test.cpp -o test.o $(CXXFLAGS)
+ans2.o: ans2.cpp
+	$(CPP) -c ans2.cpp -o ans2.o $(CXXFLAGS)

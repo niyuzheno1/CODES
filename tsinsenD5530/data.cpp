@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
 {
     srand(time(0));
     freopen("tsinsenD5530.in","w",stdout);
-    n = 300;
-    m = 100;
+    n = 100000;
+    m = 100000;
     printf("%d %d\n",n,m);
     for(int i = 1;i<=n;i++)
     {
