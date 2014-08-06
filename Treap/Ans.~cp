@@ -1,0 +1,122 @@
+#include <cstdlib>
+#include <iostream>
+#define dprint(x,y) fprintf(debug,x,y);
+/*f = 0,l = 1 ,r = 2*/
+using namespace std;
+FILE * debug;
+const int maxn = 50010;
+const int mmod = 50010;
+typedef int no[5];
+struct node
+{
+ int x,y;
+ no tg;
+};
+node t[maxn];
+int tot = 0;
+int root = 0;
+void roll(int x)
+{
+     no ch[4];
+     int f[4];
+     f[1] = x;f[2] = t[x].tg[0];f[3] = t[t[x].tg[0]].tg[0];
+     for(int i = 1;i<=3;i++)
+      memcpy(ch[i],t[i].tg,sizeof(no));
+     ch[1][0] = ch[2][0];
+     ch[2][0] = f[1];
+     for(int i = 1;i<=2;i++)
+      if(ch[3][i] == f[2])
+       ch[3][i] = x;
+     if(f[1] == t[f[2]].tg[1])
+     {
+      swap(ch[1][2],ch[2][1]);
+      ch[1][2] = f[2];
+     }
+     else
+     {
+      swap(ch[1][1],ch[2][2]);
+      ch[1][1] = f[2];
+     }
+     for(int i = 1;i<=3;i++)
+      memcpy(t[i].tg,ch[i],sizeof(t[i].tg));
+}
+int ace[maxn],len=0;
+int insert(int x,int y)
+{
+ len=0;
+ while(x != 0)
+ {
+  len++;
+  ace[len] = x;
+  if(t[x].x < y)
+   x = t[x].tg[2];
+  else
+   x = t[x].tg[1];
+ }
+ tot++;
+ t[tot].x = y;
+ t[tot].y = rand()%mmod;
+ if(len != 0)
+  t[tot].tg[0] = ace[len];
+ if(t[ace[len]].x < y)
+  t[ace[len]].tg[2] = tot;
+ else
+  t[ace[len]].tg[1] = tot;
+ for(int i = len;i>=1;i--)
+ {
+  if(t[ace[i]].x < y && t[t[ace[i]].tg[2]].y > t[ace[i]].y)
+   roll(t[ace[i]].tg[2]);
+  else if(t[ace[i]].x >= y && t[t[ace[i]].tg[1]].y > t[ace[i]].y)
+   roll(t[ace[i]].tg[1]);
+ }
+ return ace[1]==0?tot:ace[1];
+}
+void show(int x)
+{
+ if(x == 0)
+  return;
+ dprint("\n",0);
+ dprint("num:%d\n",x);
+ dprint("is left:%s\n",t[t[x].tg[0]].tg[1]==x?"Yes":"No");
+ dprint("father:%d\n",t[x].tg[0]);
+ dprint("key:%d\n",t[x].x);
+ dprint("priority value:%d\n",t[x].y);
+ show(t[x].tg[1]);
+ show(t[x].tg[2]);
+}
+int n,x;
+int main(int argc, char *argv[])
+{
+    srand(clock());
+    freopen("treap.in","r",stdin);
+    freopen("treap.out","w",stdout);
+    debug = fopen("treap.err","w");
+    scanf("%d",&n);
+    for(int i = 1;i<=n;i++)
+    {
+     scanf("%d",&x);
+     root = insert(root,x);
+    }
+    show(root);
+    /*while(true)
+    {
+     char str[8];
+     if(scanf("%s",&str) == EOF)
+      break;
+     else{
+      int x;
+      scanf("%d",&x);
+      if(str[0] == 'I');
+       //s.insert(x);
+      if(str[0] == 'F');
+       if(s.find(x) != s.end())
+        printf("YES\n");
+       else
+        printf("NO\n");
+     }
+    }*/
+    
+    fclose(stdin);
+    fclose(stdout);
+    return EXIT_SUCCESS;
+}

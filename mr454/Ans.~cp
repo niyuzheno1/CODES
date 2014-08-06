@@ -1,0 +1,20 @@
+#include <cstdlib>
+#include <iostream>
+#include <map>
+#include <queue>
+#define X first
+#define Y second
+using namespace std;
+int a[51][81];
+bool b[51][81];
+typedef pair<int,int> p;
+p operator +(p a,p b)
+{
+ return p(a.
+}
+queue<p> q;
+int main(int argc, char *argv[])
+{
+    system("PAUSE");
+    return EXIT_SUCCESS;
+}

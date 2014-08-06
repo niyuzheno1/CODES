@@ -1,0 +1,72 @@
+#include <cstdlib>
+#include <iostream>
+#include <cstring>
+using namespace std;
+int n;
+struct note
+{
+ bool term;
+ int p[27];
+};
+note r[3000010];
+int tot;
+void in(char x[])
+{
+ int t = 1;
+ for(int i = 0;i<strlen(x);i++){
+  if(r[t].p[x[i]-'a'] == 0)
+   tot++;r[t].p[x[i]-'a'] = tot;
+  t = r[t].p[x[i]-'a'];
+  }
+}
+char p[3000010];
+int mp[27][27];
+bool visit[27];
+bool dfs2(int x)
+{
+     if(visit[x])
+      return false;
+     visit[x] = 1;
+     for(int i = 0;i<='z'-'a';i++)
+      if(mp[x][i])
+       return dfs2(i);
+     return true;
+}
+bool check()
+{
+     for(int i = 0;i<='z'-'a';i++)
+      if(!dfs2(i))
+       return false;
+     return true;
+}
+void dfs(int x,int y)
+{
+     if(r[x].term)
+     {
+      if(check())
+       printf("%s",&p[1]);
+      return;
+     }
+     for(int i = 0;i<='z'-'a';i++)
+      if(r[x].p[i] != 0){
+       p[y] = i+'a';
+       for(int j = 0;j<='z'-'a';j++)
+        if(r[x].p[j] != 0 && r[x].p[j] != r[x].p[i])
+         mp[i][j]++;
+       dfs(r[x].p[i],y+1);
+       for(int j = 0;j<='z'-'a';j++)
+        if(r[x].p[j] != 0 && r[x].p[j] != r[x].p[i])
+         mp[i][j]--;
+      }
+}
+int main(int argc, char *argv[])
+{
+    scanf("%d",&n);
+    tot  = 1;
+    for(int i = 1;i<=n;i++)
+     scanf("%s",&p),in(p);
+    memset(p,0,sizeof(p));
+    dfs(1,1);
+    system("PAUSE");
+    return EXIT_SUCCESS;
+}

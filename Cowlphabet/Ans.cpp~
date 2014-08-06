@@ -1,0 +1,45 @@
+#include <cstdlib>
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+const int maxn = 54,maxU = 251;
+int U,L,P;
+int low(char x)
+{
+ return 'a'<=x && x<='z' ? x-'a'+1: x-'A'+26+1;
+}
+bool str[54][54];
+int f[54][maxU][maxU];
+int main(int argc, char *argv[])
+{
+    scanf("%d %d %d\n",&U,&L,&P);
+    for(int i = 1;i<=26+26;i++)
+     if(i <= 26)
+      f[i][1][0] = 1;
+     else
+      f[i][0][1] = 1;
+    for(int i = 1;i<=P; i++)
+    {
+     char x[2];
+     scanf("%s\n",&x);
+     str[low(x[0])][low(x[1])] = 1;
+     str[low(x[1])][low(x[0])] = 1;
+    }
+    for(int i = 1;i<=26+26;i++)
+     for(int j = 0;j<=L;j++)
+      for(int k = 0;k<=U;k++)
+       for(int l = 1;l<=26+26;l++)
+         if(str[i][l] == true)
+         {
+         if(l <= 26) f[l][j+1][k] += f[i][j][k];
+	 else f[l][j][k+1] += f[i][j][k];
+         }
+    int ans = 0;
+	for(int i = 1;i<= 26+26;i++)
+		ans += f[i][L][U]; 
+    printf("%d",ans);
+    system("PAUSE");
+    return EXIT_SUCCESS;
+}

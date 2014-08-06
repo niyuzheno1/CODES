@@ -1,0 +1,99 @@
+Interval tree:1
+ll:1
+rr:3
+l:2
+r:3
+cnt:0
+Interval tree:2
+ll:1
+rr:1
+l:0
+r:5
+cnt:0
+Interval tree:3
+ll:2
+rr:3
+l:6
+r:7
+cnt:0
+Interval tree:4
+ll:0
+rr:0
+l:0
+r:0
+cnt:0
+Interval tree:5
+ll:1
+rr:1
+l:0
+r:0
+cnt:0
+Interval tree:6
+ll:2
+rr:2
+l:0
+r:0
+cnt:0
+Interval tree:7
+ll:3
+rr:3
+l:0
+r:0
+cnt:0
+root of Interval jungle:10
+Interval tree:10
+ll:1
+rr:3
+l:9
+r:3
+cnt:1
+Interval tree:9
+ll:1
+rr:1
+l:0
+r:8
+cnt:1
+Interval tree:8
+ll:1
+rr:1
+l:0
+r:0
+cnt:1
+root of Interval jungle:13
+Interval tree:13
+ll:1
+rr:3
+l:12
+r:3
+cnt:1
+Interval tree:12
+ll:1
+rr:1
+l:0
+r:11
+cnt:1
+Interval tree:11
+ll:1
+rr:1
+l:0
+r:0
+cnt:1
+root of Interval jungle:16
+Interval tree:16
+ll:1
+rr:3
+l:12
+r:15
+cnt:2
+Interval tree:15
+ll:2
+rr:3
+l:14
+r:7
+cnt:1
+Interval tree:14
+ll:2
+rr:2
+l:0
+r:0
+cnt:1

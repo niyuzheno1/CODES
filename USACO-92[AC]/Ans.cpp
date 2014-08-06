@@ -1,0 +1,316 @@
+#include <cstdlib>
+#include <iostream>
+
+using namespace std;
+int mp[15001*3][3];
+const int p[] = {0,1,2,7,8};
+typedef int de[5][5];
+typedef int te[9][9];
+void show(de x)
+{
+      for(int i = 1;i<=4;i++){
+       for(int j = 1;j<=4;j++)
+        printf("%d ",x[i][j]);
+       printf("\n");
+      }
+}
+void showf(te x)
+{
+      for(int i = 1;i<=8;i++){
+       for(int j = 1;j<=8;j++)
+        printf("%d ",x[i][j]);
+       printf("\n");
+      }
+}
+struct seg
+{
+ struct note
+ {
+  int l,r;
+  de map;
+ };
+ struct ps
+ {
+  de a;
+  de b;
+ };
+ note t[15000*8];
+ int m;
+ te f;
+ de a;
+ void up(int l,int r)
+ {
+      memset(a,0,sizeof(a));
+      memset(f,0,sizeof(f));
+      for(int i = 1;i<=4;i++)
+        for(int j = 1;j<=4;j++)
+         f[i][j] = t[l].map[i][j];
+      for(int i = 1;i<=4;i++)
+        for(int j = 1;j<=4;j++)
+         f[4+i][4+j] = t[r].map[i][j];
+      if(mp[t[l].r][1])
+        f[3][5] = f[5][3] = 1;
+      if(mp[t[l].r][2])
+        f[4][6] = f[6][4] = 1;
+     
+     
+     for(int k = 1;k<=8;k++)
+      for(int i = 1;i<=8;i++)
+       for(int j = 1;j<=8;j++)
+         f[i][j] = f[i][j] || (f[i][k] && f[k][j]);
+     //showf(f);
+     for(int i = 1;i<=4;i++)
+      for(int j = 1;j<=4;j++)
+       a[i][j] = f[p[i]][p[j]];
+ }
+ void init(int n)
+ {
+  m = 1;
+  while(m <= n)
+   m <<= 1;
+  for(int i = 1;i<=n;i++)
+  {
+   int p = i+m;
+   t[p].l = i;t[p].r = i;
+   for(int j = 1;j<=4;j++)
+    t[p].map[j][j] = 1;
+   for(int j = 1;j<=2;j++){
+    t[p].map[j][j+2] = 1;
+    t[p].map[j+2][j] = 1;
+   }
+  }
+  for(int i = m-1;i>=1;i--)
+  {
+   int l = 2*i,r = 2*i+1;
+   if(t[l].l == 0)
+    memcpy(&t[i],&t[r],sizeof(note));
+   if(t[r].l == 0)
+    memcpy(&t[i],&t[l],sizeof(note));
+   if(t[l].l != 0 && t[r].l != 0)
+   {
+    t[i].l = t[l].l;
+    t[i].r = t[r].r;
+    up(l,r);
+    memcpy(t[i].map,a,sizeof(a));
+   }
+  }
+ }
+ void print(int n)
+ {
+  for(int i = 1;i<=m+n;i++)
+  {
+   printf("note %d:\n",i);
+   printf("left:%d\n",t[i].l);
+   printf("right:%d\n",t[i].r);
+   printf("conect map:\n");
+    for(int j = 1;j<=4;j++){
+     for(int z = 1;z<=4;z++)
+      printf("%d ",t[i].map[j][z]);
+     printf("\n");
+    }
+  }
+ }
+ void as(int x)
+ {
+  int y = 0,z = x>>1;
+  while(z > 0)
+   z>>=1,y++;
+  for(int i = 1;i<=y;i++)
+  {
+   int p = x>>i;
+   int l = 2*p,r = 2*p+1;
+   if(t[l].l == 0)
+    memcpy(&t[p].map,&t[r].map,sizeof(a));
+   if(t[r].l == 0)
+    memcpy(&t[p].map,&t[l].map,sizeof(a));
+   if(t[l].l != 0 && t[r].l != 0)
+   {
+   up(l,r);
+   memcpy(t[p].map,a,sizeof(a));
+   }
+  }
+ }
+ void change(int r1,int c1,int r2,int c2,int p)
+ {
+  if(c1 > c2) swap(c1,c2);
+  if(r1 == r2)
+  {
+   int q = min(c1,c2);
+   mp[q][r1] = p;
+  }
+  else
+  {
+   int q = c1+m;
+   t[q].map[1][2] = p;
+   t[q].map[2][1] = p;
+   t[q].map[3][4] = p;
+   t[q].map[4][3] = p;
+  }
+  as(m+c1);
+  as(m+c2);
+ }
+ void re(de & x,int y)
+ {
+  if(y == 1){
+   for(int i = 1;i<=4;i++)
+    for(int j = 1;j<=4;j++)
+     if(((i & 1) == 0) && ((j & 1) == 0))
+      x[i][j] = 0;
+  }else{
+   for(int i = 1;i<=4;i++)
+    for(int j = 1;j<=4;j++)
+     if(((i & 1) != 0) && ((j & 1) != 0))
+      x[i][j] = 0;
+  }
+ }
+ void merge(de x,de y,int z,int u)
+ {
+  memset(a,0,sizeof(a));
+  memset(f,0,sizeof(f));
+  int x1;
+  de tu;
+  if(z == 1){
+   swap(x,y);
+   x1 = t[u].r;
+   for(int i = 1;i<=4;i++)
+    for(int j = 1;j<=4;j++)
+     f[4+i][4+j] = y[i][j];
+   memcpy(tu,x,sizeof(tu));
+  }
+  else{
+   x1 = t[u].l-1;
+   for(int i = 1;i<=4;i++)
+    for(int j = 1;j<=4;j++)
+     f[i][j] = x[i][j];
+   memcpy(tu,y,sizeof(tu));
+  }
+  if(mp[x1][1]){
+        bool del = false;
+        if(z == 0){
+         for(int j = 1;j<=4;j++)
+          if(f[3][j])
+           del = 1;
+        }else{
+         for(int j = 1;j<=4;j++)
+          if(f[5][j+4])
+           del = 1;
+        }
+        if(del){
+        if(z == 0)
+        for(int j = 1;j<=4;j++)
+         f[j+4][5] = f[5][j+4] = tu[1][j];
+        else
+         for(int j = 1;j<=4;j++)
+          f[j][3] = f[3][j] = tu[3][j];
+        
+        f[3][5] = f[5][3] = 1;
+        //showf(f);
+        }
+  }
+  if(mp[x1][2]){
+        bool del = false;
+        if(z == 0){
+         for(int j = 1;j<=4;j++)
+          if(f[4][j])
+           del = 1;
+        }else{
+         for(int j = 1;j<=4;j++)
+          if(f[6][j+4])
+           del = 1;
+        }
+        if(del){
+        if(z == 0)
+         for(int j = 1;j<=4;j++)
+          f[j+4][6]=f[6][j+4] = tu[2][j];
+        else
+         for(int j = 1;j<=4;j++)
+          f[j][4] = f[4][j] = tu[4][j];
+        f[4][6] = f[6][4] = 1;
+        }
+  }
+  for(int k = 1;k<=8;k++)
+      for(int i = 1;i<=8;i++)
+       for(int j = 1;j<=8;j++)
+         f[i][j] = f[i][j] || (f[i][k] && f[k][j]);
+  for(int i = 1;i<=4;i++)
+    for(int j = 1;j<=4;j++)
+       a[i][j] = f[p[i]][p[j]];
+ }
+ bool find(int r1,int c1,int r2,int c2)
+ {
+   bool ans = false;
+   ps ax;
+   te f1,f2;
+   int l = m+c1,r = m+c2;
+   memcpy(ax.a,t[l].map,sizeof(ax.a));
+   re(ax.a,r1);
+  //show(ax.a);
+   memcpy(ax.b,t[r].map,sizeof(ax.b));
+   re(ax.b,r2);
+   //show(ax.b);
+   int ll = l,lr = r;
+   l>>=1;r>>=1;
+   while(l > 0 && r > 0)
+   {
+    if(t[ll^1].r != 0){
+    merge(ax.a,t[ll^1].map,ll&1,ll^1);
+    memcpy(f1,f,sizeof(f));
+    //showf(f1);
+    memcpy(ax.a,a,sizeof(a));
+    }
+   // show(ax.a);
+    if(t[lr^1].r != 0){
+    merge(ax.b,t[lr^1].map,lr&1,lr^1);
+    memcpy(f2,f,sizeof(f));
+    //showf(f2);
+    memcpy(ax.b,a,sizeof(a));
+    }
+   //show(ax.b);
+    if(l == r)
+    {
+     for(int i = 1;i<=8;i++)
+      for(int j = 1;j<=8;j++)
+       if(f1[i][j] == 1 && f2[i][j] == 1)
+        ans = true;
+      if(ans)
+       break;
+    }
+    ll = l,lr = r;
+    l>>=1;r>>=1;
+   }
+   return ans;
+ }
+};
+int n,q;
+seg t;
+int main(int argc, char *argv[])
+{
+    freopen("traffic.in","r",stdin);
+    freopen("traffic.out","w",stdout);
+    
+    scanf("%d%d",&n);
+    t.init(n);
+    /*for(int i = 1;i<=n;i++){
+     int r1,c1,r2,c2;
+     scanf("%d%d%d%d",&r1,&c1,&r2,&c2);
+     t.change(r1,c1,r2,c2,1);
+    }*/
+    while(true){
+    int r1,c1,r2,c2;
+    char state[2];
+    scanf("%s%d%d%d%d",&state,&r1,&c1,&r2,&c2);
+    if(state[0] == 'E')
+     break;
+    if(state[0] != 'A')
+    t.change(r1,c1,r2,c2,(state[0] == 'O')?1:0);
+    else{
+      if(c1 > c2)
+       swap(c1,c2),swap(r1,r2);
+     printf("%s\n",t.find(r1,c1,r2,c2)==1?"Y":"N");
+     }
+     //t.print(n);
+    }
+    fclose(stdin);
+    fclose(stdout);
+    return EXIT_SUCCESS;
+}

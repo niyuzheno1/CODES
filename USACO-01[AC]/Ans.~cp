@@ -1,0 +1,97 @@
+#include <cstdlib>
+#include <iostream>
+#define dump printf
+#define dbig print
+using namespace std;
+typedef long long int64;
+int64 pow(int64 x,int64 y)
+{
+      int64 ret = 1;
+      for(int i = 1;i<=y;i++)
+       ret = ret*x; 
+      return ret;
+}
+int64 mod = 1000000000;
+struct bignum
+{
+       int64 a[20001];
+       int len;
+       bignum()
+       {
+        memset(a,0,sizeof(a));
+        len = 0;
+       }
+       bignum operator * (bignum x)
+       {
+              bignum tmp;
+              for(int i = 1;i<=len;i++)
+               for(int j = 1;j<=x.len;j++)
+                tmp.a[i+j-1] += a[i]*x.a[j];
+              tmp.len = len+x.len-1;
+              for(int i = 1;i<=tmp.len;i++)
+               if(tmp.a[i] >= mod){
+                tmp.a[i+1] = tmp.a[i]/mod;
+                tmp.a[i] %= mod;
+                tmp.len = max(tmp.len,i+1);
+               }
+              return tmp;
+       }
+};
+int64 n,p;
+char str[300];
+void itoa(char * a,int64 b,int64 c,int64 d)
+{
+     int l = 0;
+     while(b != 0)
+     {
+      a[l] = b%c+d;
+      l++;
+      b /= c;
+     }
+}
+int itoa2(int64 * a,int64 b,int64 c)
+{
+     int l = 1;
+     while(b != 0)
+     {
+      a[l] = b%c;
+      l++;
+      b /= c;
+     }
+     return l;
+}
+bignum ans,base;
+void print(bignum a)
+{
+  for(int i = a.len;i>=1;i--)
+   for(int j = 10;j>=1;j--)
+   {
+    int64 x = pow(10,j);
+    int64 y = x/10;
+    x--;
+    if((a.a[i]<=x && a.a[i] >= y)||(j==1&& a.a[i] == 0)){
+     if(i != a.len)
+     for(int z = 10;z>j;z--)
+      printf("0");
+     printf("%I64d",a.a[i]);
+    }
+   }
+}
+int main(int argc, char *argv[])
+{
+    mod *= 10;
+    scanf("%I64d%I64d",&n,&p);
+    itoa(str,p,2,'0');
+    dump("%s",str);   
+    base.len = itoa2(base.a,n,mod)-1;
+    ans.a[1] = 1;ans.len = 1;
+    
+    for(int i = strlen(str)-1;i>=0;i--){
+     ans = ans*ans;
+     if(str[i] == '1')
+      ans = ans*base;
+    }
+    print(ans);printf("\n");
+    system("PAUSE");
+    return EXIT_SUCCESS;
+}

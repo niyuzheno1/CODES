@@ -1,0 +1,72 @@
+#include <cstdlib>
+#include <iostream>
+
+using namespace std;
+const int inf = 0x7f7f7f7f;
+int n,m,tot;
+int st[5010];
+int d[5010];
+int a[5010];
+int v[5010];
+struct p
+{
+ int v,n;
+};
+p lk[10010*2];
+void ad(int x,int y)
+{
+     tot++;
+     lk[tot].v = y;
+     lk[tot].n = st[x];
+     st[x] = tot;
+}
+int dfs(int x,int y,int f)
+{
+    if(v[x])
+     return d[x];
+    v[x] = 1;
+    d[x] = y;
+    a[y] = x;
+    for(int i = st[x];i;i=lk[i].n)
+    {
+    int nx = lk[i].v;
+    if(nx != f)
+     d[x] = min(d[x],dfs(nx,y+1,x));
+    }
+    for(int i = y;i>=d[x];i--)
+     d[a[i]] = d[x];
+    return d[x];
+}
+int ans = 0;
+void dfs2(int x)
+{
+     v[x] = 1;
+     for(int i = st[x];i;i=lk[i].n)
+     {
+     int nx = lk[i].v;
+     if(!v[nx]){
+      if(d[nx] > d[x])
+        ans++;
+      dfs2(nx);
+      }
+     }
+     return;
+}
+int main(int argc, char *argv[])
+{
+    scanf("%d%d",&n,&m);
+    for(int i = 1;i<=m;i++){
+     int u,v;
+     scanf("%d%d",&u,&v);
+     ad(u,v);
+     ad(v,u);
+    }
+    dfs(1,1,-1);
+    for(int i = 1;i<=n;i++)
+     printf("%d\n",d[i]);
+    memset(v,0,sizeof(v));
+    dfs2(1);
+    printf("%d",ans);
+    system("PAUSE");
+    return EXIT_SUCCESS;
+}

@@ -1,0 +1,99 @@
+#include <cstdlib>
+#include <iostream>
+#include <map>
+#include <vector>
+#define X first
+#define Y second
+using namespace std;
+int n;
+int a[61];
+typedef pair<int,int> p;
+typedef pair<p,p> p2;
+map<p2,int> f[61];
+map<p2,int> g[61];
+vector<int> c[4];
+int N = 1000;
+void print(int x,p2 y)
+{
+     if(x <= 0)
+     {
+      for(int i = 1;i<=3;i++){
+       for(int j = 0;j<c[i].size();j++)
+        printf("%d\n",c[i][j]);
+      }
+      return;
+     }
+     c[g[x][y]].push_back(x);
+     p2 ny;
+     ny = y;
+     if(g[x][y] == 3)
+      print(x-1,ny);
+     else if(g[x][y] == 2)
+     {
+      ny.Y.Y = ny.Y.Y-1;
+      ny.X.Y = ny.X.Y-(a[x]-(N-a[x]));
+      print(x-1,ny);
+     }
+     else if(g[x][y] == 1)
+     {
+      ny.Y.X = ny.Y.X-1;
+      ny.X.X = ny.X.X-(a[x]-(N-a[x]));
+      print(x-1,ny);
+     }
+}
+int main(int argc, char *argv[])
+{
+    freopen("jpol.in","r",stdin);
+    freopen("jpol.out","w",stdout);
+    
+    scanf("%d",&n);
+    n = 3*n;
+    for(int i = 1;i<=n;i++)
+     scanf("%d",&a[i]);
+    f[0][p2(p(0,0),p(0,0))] = 0;
+    for(int i = 1;i<=n;i++)
+     for(map<p2,int>::iterator it = f[i-1].begin();it != f[i-1].end();it++)
+     {
+      p x = (*it).X.X;
+      p xx = (*it).X.Y;
+      int y = (*it).Y;
+      p2 nx;
+      nx = (*it).X;
+      if(i-(xx.X+xx.Y) <= n/3){
+      if(g[i][nx] == 0 || f[i][nx]<y+a[i]-(N-a[i]))
+      {
+       f[i][nx] = y+a[i]-(N-a[i]);
+       g[i][nx] = 3;
+      }
+      }
+      if(xx.X+1 <= n/3){
+      nx = p2(p(x.X+a[i]-(N-a[i]),x.Y),p(xx.X+1,xx.Y));
+      if(g[i][nx] == 0 || f[i][nx]<y )
+      {
+       f[i][nx]=y;
+       g[i][nx] = 1;
+      }
+      }
+      if(xx.Y+1 <= n/3){
+      nx = p2(p(x.X,x.Y+a[i]-(N-a[i])),p(xx.X,xx.Y+1));
+      if(g[i][nx] == 0 || f[i][nx]<y)
+      {
+       f[i][nx] = y;
+       g[i][nx] = 2;
+      }
+      }
+     }
+    for(map<p2,int>::iterator it = f[n].begin();it != f[n].end();it++)
+    {
+     p nx = (*it).X.X;
+     int a = ((*it).Y>0)?1:0;
+     a += ((nx).X>0)?1:0;
+     a += ((nx).Y>0)?1:0;
+     if(a >= 2){
+      print(n,(*it).X);
+      break;
+     }
+    }
+    fclose(stdin);fclose(stdout);
+    return EXIT_SUCCESS;
+}

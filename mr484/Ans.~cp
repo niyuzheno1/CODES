@@ -1,0 +1,106 @@
+#include <cstdlib>
+#include <iostream>
+#include <set>
+#include <string>
+#define delta if(b[i][1] < a[j][1] || b[i][2] < a[j][2] || b[i][3] < a[j][3])
+#define calcu  b[i][1] = max(a[j][1],b[i][1]);b[i][2] = max(a[j][2],b[i][2]);b[i][3] = max(a[j][3],b[i][3]);
+#define zero(a) memset(a,0,sizeof(a))
+
+using namespace std;
+
+int n;
+char m[210][510];
+int a[210][4];
+int b[210][4];
+bool c[210];
+bool d[210];
+set<string> h;
+char inf[101],ouf[101];
+int main(int argc, char *argv[])
+{
+for(int cani = 0;cani<=4;cani++){
+    
+    zero(inf);
+    zero(ouf);
+    sprintf(inf,"mr484.in%d",cani);
+    sprintf(ouf,"mr484.ou%d",cani);
+    freopen(inf,"r",stdin);
+    freopen(ouf,"w",stdout);
+	zero(m);zero(a);zero(b);zero(c);zero(d);
+	h.clear();
+    scanf("%d\n",&n);
+    for(int i = 1;i<=n;i++){
+    char chr = 0;
+    int tot = 0;
+    scanf("%c",&chr);
+     while(chr != '\n')
+     {
+     m[i][tot] = chr;
+     tot++;
+     scanf("%c",&chr);
+     }
+    scanf("%d %d %d\n",&a[i][1],&a[i][2],&a[i][3]);
+    b[i][1] = a[i][1];
+    b[i][2] = a[i][2];
+    b[i][3] = a[i][3];
+    }
+    bool refresh = 1;
+    while(refresh)
+    {
+     refresh =0;
+     for(int i = 1;i<=n;i++)
+      for(int j = 1;j<=n;j++)
+       if(i != j)
+       {
+        if(a[i][1] > a[j][1] && a[i][2] > a[j][2])
+        {
+         delta
+         refresh = 1;
+         calcu
+        }
+        if(a[i][3] > a[j][3] && a[i][2] > a[j][2])
+        {
+         delta
+         refresh = 1;
+         calcu
+        }
+        if(a[i][1] > a[j][1] && a[i][3] > a[j][3])
+        {
+         delta
+         refresh = 1;
+         calcu
+        }
+       }
+    }
+    for(int i = 1;i<=n;i++)
+    {
+    int u = 0;
+            for(int j = 1;j<=n;j++)
+            if(i!= j){
+            if(a[i][1] > a[j][1] && (b[i][2] > a[j][2] || b[i][3] > a[j][3])) {
+              u++;
+			  continue;
+			}
+            if(a[i][2] > a[j][2] && (b[i][1] > a[j][1] || b[i][3] > a[j][3])) {
+              u++;
+			  continue;
+			}
+            if(a[i][3] > a[j][3] && (b[i][2] > a[j][2] || b[i][1] > a[j][1])) {
+              u++;
+			  continue;
+			}
+            }
+		
+     if(u == n-1)
+      d[i] = 1;
+    }
+    for(int i = 1;i<=n;i++)
+     if(d[i] == 1)
+      h.insert(string(m[i]));
+    printf("%d\n",h.size());
+    for(set<string>::iterator i = h.begin();i != h.end();i++)
+     printf("%s\n",(*i).c_str());
+    fclose(stdin);fclose(stdout);
+}
+    return EXIT_SUCCESS;
+}

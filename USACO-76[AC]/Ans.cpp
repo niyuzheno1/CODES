@@ -1,0 +1,84 @@
+#include <cstdlib>
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+using namespace std;
+int n,m,tot;
+bool v[10010];
+int st[10010];
+int d[10010];
+struct p
+{
+ int n,v;
+};
+p lk[50010];
+void add(int x,int y)
+{
+ tot++;
+ lk[tot].n = st[x];
+ lk[tot].v = y;
+ st[x] = tot;
+}
+int so;
+int dfs(int x)
+{
+     if(v[x] && x != so)
+      return 0;
+     else if(v[x])
+     {
+      return so;
+     }
+     v[x] = 1;
+     int p = 0;
+     for(int i = st[x];i;i=lk[i].n)
+      p = max(p,dfs(lk[i].v));
+     d[x] = max(d[x],p);
+     return p;
+}
+void dfs2(int x)
+{
+     if(v[x])
+      return;
+     v[x] = 1;
+     for(int i = st[x];i;i=lk[i].n)
+      dfs2(lk[i].v);
+     return;
+}
+int main(int argc, char *argv[])
+{
+    //#ifndef ONLINE_JUDGE
+    //freopen("popular.in","r",stdin);
+    //freopen("popular.out","w",stdout);
+    //#endif
+    scanf("%d%d",&n,&m);
+    for(int i = 1;i<=m;i++)
+    {
+     int x,y;
+     scanf("%d%d",&x,&y);
+     add(y,x);
+    }
+    int ans2 = 0,ans = 0;
+    for(int i = 1;i<=n;i++)
+     if(!v[i]){
+     so = i;
+     d[i] = so;
+     dfs(i);
+     ans2 = so;
+     }
+    memset(v,0,sizeof(v));
+    dfs2(ans2);
+    for(int i = 1;i<=n;i++){
+     if(v[i] == 0){
+      printf("0");
+      return 0;
+     }
+     if(d[i] == ans2)
+      ans++;
+    }
+    
+    printf("%d",ans);
+    /*#ifndef ONLINE_JUDGE
+    fclose(stdin);fclose(stdout);
+    #endif*/
+    return EXIT_SUCCESS;
+}

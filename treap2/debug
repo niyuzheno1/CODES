@@ -1,0 +1,66 @@
+tree 1:
+left:0
+right:0
+random:18467
+value:1
+size:1
+tree 2:
+left:0
+right:0
+random:6334
+value:2
+size:1
+tree 3:
+left:0
+right:0
+random:18467
+value:1
+size:1
+tree 4:
+left:5
+right:0
+random:6334
+value:2
+size:3
+tree 5:
+left:0
+right:0
+random:18467
+value:1
+size:1
+tree 6:
+left:5
+right:0
+random:6334
+value:2
+size:3
+tree 7:
+left:0
+right:0
+random:29358
+value:3
+size:1
+tree 8:
+left:5
+right:0
+random:6334
+value:2
+size:3
+tree 9:
+left:5
+right:10
+random:6334
+value:2
+size:3
+tree 10:
+left:0
+right:0
+random:29358
+value:3
+size:1
+tree 11:
+left:5
+right:10
+random:6334
+value:2
+size:3

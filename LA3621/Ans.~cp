@@ -1,0 +1,41 @@
+#include <cstdlib>
+#include <iostream>
+#include <set>
+#define  ser(m,i,x,y) for(m i = x;i != y ;i++)
+#define  itor iterator
+using namespace std;
+typedef set<int> si;
+int table[1010],cnt = 0;
+si nes;
+void dfs(int x,set<int> & y)
+{
+    if(cnt == 1000)
+     return;
+    nes = y;
+    ser(si::itor,i,y.begin(),y.end())
+     if(table[*i] == 0 && *i<= 1000 && *i >= 1)
+      table[*i] = x,cnt++;
+    for(si::itor i = y.begin();i != y.end();i++){
+     for(si::itor j = y.begin();j != y.end();j++){
+      
+      if((*i)-(*j) > 0)
+      nes.insert((*i)-(*j));
+      nes.insert(*i+*j);
+     }
+    }
+    y = nes;
+    dfs(x+1,y);
+}
+int main(int argc, char *argv[])
+{
+    freopen("table","w",stdout);
+    si so;
+    so.insert(1);
+    dfs(1,so);
+    printf("{");
+    for(int i = 1;i<=999;i++)
+     printf("%d,",table[i]);
+    printf("%d}",table[1000]);
+    
+    return EXIT_SUCCESS;
+}

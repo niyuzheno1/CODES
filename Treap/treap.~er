@@ -1,0 +1,30 @@
+
+num:4
+is left:No
+father:0
+key:4
+priority value:26500
+
+num:2
+is left:Yes
+father:4
+key:2
+priority value:18467
+
+num:1
+is left:Yes
+father:2
+key:1
+priority value:41
+
+num:3
+is left:No
+father:4
+key:3
+priority value:6334
+
+num:5
+is left:No
+father:4
+key:5
+priority value:19169

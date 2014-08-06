@@ -1,0 +1,56 @@
+#include <cstdlib>
+#include <iostream>
+#include <queue>
+
+using namespace std;
+int n,k;
+struct p
+{
+  int k,x,y;
+  p()
+  {
+   k=x=y=0;
+  }
+  p(int a,int b,int c)
+  {
+   k = a;x = b,y = c;
+  }
+  bool operator <(p a) const
+  {
+       if(k == a.k)
+        return x > a.x;
+       return k < a.k;
+  }    
+};
+int s[100010*2];
+int f[100010*2],ans;
+priority_queue<p> q;
+p Q;
+int main(int argc, char *argv[])
+{
+    scanf("%d%d",&n,&k);
+    for(int i = 1;i<=n;i++)
+    {
+     int x;scanf("%d",&x);s[i] = s[i-1]+x;
+    }
+    for(int i = n+1;i<=n+k;i++)
+     s[i] = s[i-1];
+    q.push(p(0,0,0));
+    Q = p(s[1],1,0);f[1] = s[1];
+    for(int i = 2;i<=n+k;i++)
+    {
+     p newq = p(0,i,0);
+     while(!q.empty() && q.top().y+i-2-q.top().x+1 > k)
+      q.pop();
+     if(!q.empty())
+      newq.k = q.top().k+s[i-2]-s[(q.top().x-1)<0?0:(q.top().x-1)]+s[i]-s[i-1];
+     f[i] = newq.k;
+     q.push(Q);
+     Q = newq;
+    }
+    for(int i = 1;i<=n+k;i++)
+     ans = max(f[i],ans);
+    printf("%d",ans);
+    system("PAUSE");
+    return EXIT_SUCCESS;
+}

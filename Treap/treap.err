@@ -1,0 +1,102 @@
+
+num:6
+is left:No
+father:0
+key:8945
+priority value:31430
+
+num:2
+is left:Yes
+father:6
+key:8855
+priority value:28693
+
+num:7
+is left:Yes
+father:2
+key:2997
+priority value:23927
+
+num:18
+is left:No
+father:7
+key:4683
+priority value:20107
+
+num:3
+is left:No
+father:18
+key:8365
+priority value:12255
+
+num:15
+is left:No
+father:18
+key:7578
+priority value:426
+
+num:5
+is left:No
+father:6
+key:20537
+priority value:27660
+
+num:4
+is left:Yes
+father:12
+key:10450
+priority value:24449
+
+num:19
+is left:No
+father:4
+key:15260
+priority value:12150
+
+num:17
+is left:Yes
+father:19
+key:12329
+priority value:11963
+
+num:9
+is left:No
+father:5
+key:28881
+priority value:27472
+
+num:8
+is left:Yes
+father:9
+key:21655
+priority value:17649
+
+num:1
+is left:Yes
+father:8
+key:21238
+priority value:54
+
+num:11
+is left:No
+father:8
+key:23611
+priority value:5114
+
+num:16
+is left:No
+father:11
+key:24388
+priority value:4307
+
+num:14
+is left:No
+father:9
+key:31597
+priority value:17476
+
+num:13
+is left:Yes
+father:14
+key:29533
+priority value:13533

@@ -1,0 +1,3 @@
+正在比较文件 splay2.out 和 SPLAY2.ANS
+FC: 找不到差异
+

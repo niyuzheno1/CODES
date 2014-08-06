@@ -1,0 +1,45 @@
+#include <cstdlib>
+#include <iostream>
+#include <vector>
+#include <map>
+#include <queue>
+#define X first
+#define Y second
+
+using namespace std;
+int n,m;
+typedef pair<int,int> p;
+queue<p> q;
+int ex,ey,sx,sy;
+int f[310][310];
+char mp[310][310];
+vector<p> v[27];
+
+int main(int argc, char *argv[])
+{
+    memset(&f,0x7f,sizeof(f));
+    scanf("%d%d",&n,&m);
+    for(int i = 0;i<=301;i++)
+     for(int j = 0;j<=301;j++)
+      mp[i][j] = '#';
+    for(int i = 1;i<=n;i++)
+      scanf("%s",&mp[i][1]);
+    for(int i = 1;i<=n;i++)
+     for(int j = 1;j<=m;j++)
+      if(mp[i][j] == '=')
+      {
+       mp[i][j] = '.';
+       ex = i;ey = j;
+      }
+      else if(mp[i][j] == '@')
+      {
+       mp[i][j] = '.';
+       sx = i;sy = j;
+      }
+      else if(mp[i][j] <= 'Z' && mp[i][j] >= 'A')
+       v[mp[i][j]-'A'].push_back(p(i,j));
+    q.push(p(sx,sy));
+    while(!q.empty())
+    system("PAUSE");
+    return EXIT_SUCCESS;
+}

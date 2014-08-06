@@ -1,0 +1,85 @@
+#include <cstdlib>
+#include <iostream>
+
+using namespace std;
+const int inf = 5000000;
+int n,x,tot;
+int st[510],fa[510];
+struct pp
+{
+ int v,n,w;
+};
+pp p[510*2];
+int d[510],t;
+long long b[510];
+long long f[510][510][2];
+void add(int a,int b,int w)
+{
+     tot++;
+     p[tot].v = b;
+     p[tot].n = st[a];
+     p[tot].w = w;
+     st[a] = tot;
+}
+void dfs(int x)
+{
+     t++;d[t] = x;
+     for(int i = st[x];i!=0;i=p[i].n)
+      dfs(p[i].v);
+}
+long long u[510][510][2];
+int main(int argc, char *argv[])
+{
+    freopen("tselect.in","r",stdin);
+    freopen("tselect.out","w",stdout);
+    scanf("%d%d",&n,&x);
+    for(int i = 1;i<=n;i++)
+    {
+     int w,a;
+     scanf("%d%d",&w,&a);
+     add(a,i,w);
+     fa[i] = a;
+     b[i] = w;
+    }
+    dfs(0);
+    for(int i = t;i>=1;i--)
+    {
+      int x = d[i];
+      if(st[x] == 0)
+      {
+      for(int j = 1;j<=n;j++)
+       f[x][j][0] = f[x][j][1] = -inf;
+      f[x][0][0] = 0;
+      f[x][0][1] = b[x];
+      }
+      else
+      {
+       for(int j = 0;j<=n;j++)
+        for(int z = 0;z<=n;z++)
+         u[j][z][0] = u[j][z][1] = -inf;
+       u[0][0][0] = u[0][0][1] = 0;
+       int c = 0;
+       for(int y = st[x];y != 0;y = p[y].n)
+       {
+        c++;
+        int j = p[y].v;
+        for(int m = 0;m<=n;m++)
+         for(int k = n;k>=0;k--)
+         {
+          if(u[c-1][k-m][0] > -inf && max(f[j][m][0],f[j][m][1]) > -inf)
+          u[c][k][0] = max(u[c][k][0],u[c-1][k-m][0]+max(f[j][m][0],f[j][m][1]));
+          if(k-m-1 >= 0&& max(u[c-1][k-m-1][0],u[c-1][k-m-1][1]) > -inf && f[j][m][1] > -inf)
+          u[c][k][1] = max(u[c][k][1],max(u[c-1][k-m-1][0],u[c-1][k-m-1][1])+f[j][m][1]);
+         }
+        for(int j = 0;j<=n;j++)
+         f[x][j][0] = u[c][j][0],f[x][j][1] = u[c][j][1]+b[x];
+       }
+      }
+    }
+    int ans = 0;
+    for(int i = 0;i<=n;i++)
+     printf("%d ",f[1][i][0]);
+    printf("\n");
+    fclose(stdin);fclose(stdout);
+    return EXIT_SUCCESS;
+}

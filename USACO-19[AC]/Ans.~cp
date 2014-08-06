@@ -1,0 +1,68 @@
+#include <cstdlib>
+#include <iostream>
+
+using namespace std;
+double cs(double dx,double h1,double h2)
+{
+    return 0.5*dx*(h1+h2);
+}
+double gf(double x,double y)
+{
+       x -= y/4;
+       return x; 
+}
+double gl(double x,double y)
+{
+       x += y/4;
+       return x;
+}
+double ch(double x1,double y1,double x)
+{
+       return -4*(x-x1)+y1;
+}
+double ga(double x1,double y1,double x2,double y2)
+{
+       double mid = 0.5*(gf(x2,y2)+gl(x1,y1));
+       if(mid > x2)
+        return -1;
+       else
+        return ch(x1,y1,mid);
+}
+int n;
+double a[100010],b[100010];
+struct p
+{
+       double f;
+       double x,y;
+       bool operator < (p u) const
+       {
+           return f < u.f;
+       }
+};
+p o[100010*2];
+p u;
+int main(int argc, char *argv[])
+{
+    scanf("%d",&n);
+    for(int i = 1;i<=n;i++)
+     scanf("%lf%lf",&a[i],&b[i]);
+    for(int i = 1;i<=n;i++){
+     o[2*i].f = gf(a[i],b[i]);
+     o[2*i].x = a[i];o[2*i].y = b[i];
+     o[2*i-1].f = gl(a[i],b[i]);
+     o[2*i-1].x = gl(a[i],b[i]);o[2*i-1].y = 0;
+    }
+    sort(o+1,o+1+2*n);
+    u.x = -65536,u.y = 0;
+    for(int i = 1;i<=2*n;i++)
+    {
+     if(gf(o[i].x,o[i].y)>gl(u.x,u.y))
+      u.x = o[i].x,u.y = o[i].y;
+     else
+     {
+     
+     }
+    }
+    system("PAUSE");
+    return EXIT_SUCCESS;
+}

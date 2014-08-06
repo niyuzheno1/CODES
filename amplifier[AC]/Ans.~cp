@@ -1,0 +1,150 @@
+#include <cstdlib>
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+//#define ff fprintf
+#define pi 3.1415926535
+using namespace std;
+FILE * d;
+int n;
+const int maxn =  500010;
+const double eps = 10e-7;
+int cmp(double x)
+{
+  if(abs(x) < eps)
+   return 0;
+  if(x > 0)
+   return 1;
+  if(x < 0)
+   return -1;
+}
+struct po
+{
+ double x,y;
+ po()
+ {
+  x = y = 0;
+ }
+ po(double xx,double yy)
+ {
+  x = xx;y = yy;
+ }
+ po turn(double a)
+ {
+  return po(cos(a)*x-sin(a)*y,sin(a)*x+cos(a)*y);
+ }
+ po operator-(po xx)
+ {
+  return po(x-xx.x,y-xx.y);
+ }
+ po operator+(po xx)
+ {
+  return po(x+xx.x,y+xx.y);
+ }
+ po cha(double k)
+ {
+  return po(x*(1/k),y);
+ }
+ double abs()
+ {
+  return sqrt(x*x+y*y);
+ }
+ po operator*(double u)
+ {
+  return po(x*u,y*u);
+ }
+};
+double det(po x,po y)
+{
+ return x.x*y.y-x.y*y.x;
+}
+struct li
+{
+ po q,v;
+ li()
+ {
+  q = v = po(0,0);
+ }
+ li(po a,po b)
+ {
+  q = a;
+  v = (a-b)*(1/((a-b).abs()));
+ }
+};
+po inse(li a,li b)
+{
+ po c = a.q-b.q;
+ double xx = det(b.v,c)/det(a.v,b.v);
+ return a.q+a.v*xx;
+}
+po cen(po a,po b,po c)
+{
+  if(cmp(det(b-a,c-a))==0)
+  {
+   if(b.x < a.x)
+    swap(b,a);
+   if(c.x < a.x)
+    swap(c,a);
+   if(c.x < b.x)
+    swap(c,b);
+   return (a+c)*(0.5);
+  }
+  li ab = li(a,b);
+  li bc = li(b,c);
+  ab.v.turn(0.5*pi);
+  ab.q = (a+b)*0.5;
+  bc.v.turn(0.5*pi);
+  bc.q = (a+b)*0.5;
+  return inse(ab,bc);
+}
+po a[maxn];
+double solve()
+{
+ po ce = a[0];double r = 0;
+ for(int i = 2;i<=n;i++)
+ {
+  if(cmp((a[i]-ce).abs()-r) <= 0)
+   continue;
+  ce = a[i];r = 0;
+  for(int j = 1;j<i;j++)
+  {
+   if(cmp((a[j]-ce).abs()-r) <= 0)
+    continue;
+   ce = (a[j]+a[i])*0.5;
+   r = (a[j]-ce).abs();
+   for(int k = 1;k<j;k++)
+   {
+    if(cmp((a[k]-ce).abs()-r) <= 0)
+     continue;
+    ce = cen(a[i],a[j],a[k]);
+    r = (a[k]-ce).abs();       
+   }
+  }
+ }
+ return r;
+}
+int main(int argc, char *argv[])
+{
+    freopen("amplifier.in","r",stdin);
+    freopen("amplifier.out","w",stdout);
+    //d = fopen("debug.txt","w");
+    scanf("%d",&n);
+    for(int i = 1;i<=n;i++)
+     scanf("%lf%lf",&a[i].x,&a[i].y);
+    double ag = 0;
+    scanf("%lf",&ag);ag = (ag/180)*pi;
+    double l = 0;scanf("%lf",&l);
+    for(int i = 1;i<=n;i++)
+    {
+     a[i] = a[i].turn(-ag);
+     a[i] = a[i].cha(l);
+     //ff(d,"%d:x:%lf y:%lf\n",i,a[i].x,a[i].y);
+    }
+    random_shuffle(a+1,a+1+n);
+    printf("%.3f\n",solve());
+    fclose(d);
+    fclose(stdin);fclose(stdout);
+    return EXIT_SUCCESS;
+}

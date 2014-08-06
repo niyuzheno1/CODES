@@ -1,0 +1,35 @@
+#include <cstdlib>
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#define dprint(a,b) fprintf(debug,a,b);
+using namespace std;
+FILE * debug;
+const int maxn = 200010;
+int n;
+struct tab
+{
+ int l,r;
+ bool operator < (tab x) const
+ {
+      if(r == x.r)
+       return l < x.l;
+      else
+       return r<x.r;
+ }
+};
+tab a[maxn];
+int main(int argc, char *argv[])
+{
+    freopen("convention.in","r",stdin);
+    freopen("convention.out","w",stdout);
+    debug = fopen("debug.txt","w");
+    scanf("%d",&n);
+    for(int i = 1;i<=n;i++)
+     scanf("%d%d",&a[i].l,&a[i].r);
+    
+    fclose(debug);
+    fclose(stdin);
+    fclose(stdout);
+    return EXIT_SUCCESS;
+}

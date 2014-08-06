@@ -1,0 +1,35 @@
+#include <cstdlib>
+#include <iostream>
+#include <map>
+#define  X first
+#define  Y second
+using namespace std;
+typedef pair<int,int> pp;
+typedef pair<pp,pp> p;
+map<p,int> f;
+int CountO,CountX,maxO,maxX;
+int dfs(int x,int y,int z,int a)
+{
+ if(f[p(pp(x,y),pp(z,a))])
+  return f[p(pp(x,y),pp(z,a))];
+ int ans = 0;
+ if(x < CountO && z<maxO)
+  ans = dfs(x+1,y,z+1,0)+1;
+ if(y < CountX && a<maxX)
+  ans =max(ans,dfs(x,y+1,0,a+1)+1);
+ return (f[p(pp(x,y),pp(z,a))]= ans);
+}
+int main(int argc, char *argv[])
+{
+    freopen("bs.in","r",stdin);
+    freopen("bs.ans","w",stdout);
+    while(scanf("%d%d%d%d",&CountO,&CountX,&maxO,&maxX) != EOF)
+    {
+     f.clear();
+     printf("%d\n",dfs(0,0,0,0));
+    }
+    fclose(stdin);
+    fclose(stdout);
+    
+    return EXIT_SUCCESS;
+}

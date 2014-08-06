@@ -1,0 +1,127 @@
+#include <cstdlib>
+#include <iostream>
+#include <queue>
+#include <cstdio>
+using namespace std;
+const int maxn = 10010,maxm = 80010,maxl = 16;
+int n,m,q,tot;
+struct link{int n,v,p,del;};
+link lk[maxm];
+int st[maxn],dist[maxn],vis[maxn],d,fa[maxn],len[maxm],cnt,g[maxn],dis[maxn],de[maxn];
+int f[maxn][maxl],now;
+void add(int x,int y,int z)
+{
+     lk[tot].v = y;lk[tot].p = z;lk[tot].n = st[x];st[x] = tot;tot++;
+}
+void bfs1()
+{
+     memset(dist,0x4f,sizeof(dist));
+     queue<int> q;
+     q.push(1);dist[1] = 0;
+     while(!q.empty())
+     {
+      int x = q.front();q.pop();
+      for(int i = st[x];i!=-1;i=lk[i].n)
+       if(dist[lk[i].v] >  dist[x]+lk[i].p){
+        dist[lk[i].v] = dist[x]+lk[i].p;
+        q.push(lk[i].v);
+       }
+     }
+}
+void comp(int x,int i)
+{
+     cnt++;len[cnt] = lk[i].p;int y = x,u = lk[i].v;x=lk[i].v;
+     lk[i].del = lk[i^1].del = 1;g[y] = cnt;add(y,x,0);add(x,y,0);
+     while(y != u)
+     {
+       i = fa[y];i = i^1;lk[i].del = lk[i^1].del = 1;len[cnt] += lk[i].p;y = lk[i].v;
+       g[y] = cnt;add(x,y,0);add(y,x,0);
+     }
+  
+}
+void dfs1(int x)
+{
+
+   vis[x] = ++d;
+   for(int i = st[x];i!=-1;i=lk[i].n)
+    if(i <= now){
+    int u = lk[i].v;
+    if(!vis[u])
+    {
+     dis[u] = dis[x]+lk[i].p;
+     fa[u] = i;
+     dfs1(u);       
+    }else if(fa[x] != (i^1) && vis[u] < vis[x])
+     comp(x,i);
+   }
+}
+void bfs2()
+{
+     queue<int> q;
+     q.push(1);f[1][0] = 1;de[1] = 1;
+     while(!q.empty())
+     {
+      int x = q.front();q.pop();
+      for(int i = st[x];i!=-1;i=lk[i].n)
+        if(f[lk[i].v][0] == 0 && lk[i].del == 0)
+        {
+        int u = lk[i].v;
+        de[u] = de[x]+1;
+        f[u][0] = x;
+         q.push(u);
+       }
+      for(int i = 1;i<maxl;i++)
+       f[x][i] = f[f[x][i-1]][i-1];
+     }
+}
+int lca(int x,int y)
+{
+  if(de[x] < de[y])
+   swap(x,y);
+  int u = x,v = y;
+  
+  for(int i = maxl-1;i>=0;i--)
+   if(de[f[x][i]] >= de[y])
+    x = f[x][i];
+  
+  if(x == y)
+   return dist[u]-dist[v];
+  for(int i = maxl-1;i>=0;i--)
+   if(f[x][i] != f[y][i])
+    x = f[x][i],y = f[y][i];
+  /*if(x!= y && f[x][0] == f[y][0])
+   x = f[x][0],y = f[y][0];*/
+  if(g[x] == g[y] && g[x])
+  {
+     int px = abs(dis[x]-dis[y]);
+     return dist[u]+dist[v]-dist[x]-dist[y]+min(len[g[x]]-px,px); 
+  }
+  else
+   return dist[u]+dist[v]-2*dist[f[x][0]];
+}
+int main(int argc, char *argv[])
+{
+    memset(st,0xff,sizeof(st));
+    freopen("communicate.in","r",stdin);
+    freopen("communicate.out","w",stdout);
+    scanf("%d%d%d",&n,&m,&q);
+    for(int i = 1;i<=m;i++)
+    {
+     int x,y,z;
+     scanf("%d%d%d",&x,&y,&z);
+     add(x,y,z);
+     add(y,x,z);
+    }
+    bfs1();now = tot;
+    dfs1(1);
+    bfs2();
+    for(int i = 1;i<=q;i++)
+    {
+     int x,y;
+     scanf("%d%d",&x,&y);
+     printf("%d\n",lca(x,y));
+    }
+    fclose(stdin);
+    fclose(stdout);
+    return EXIT_SUCCESS;
+}

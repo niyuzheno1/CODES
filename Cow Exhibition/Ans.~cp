@@ -1,0 +1,31 @@
+#include <cstdlib>
+#include <iostream>
+
+using namespace std;
+
+const int maxn = 110,maxm = 1100*110;
+int f[maxn][maxm];
+int N;
+int main(int argc, char *argv[])
+{
+    scanf("%d",&N);
+    memset(&f,0xff,sizeof(f));
+    f[0][0] = 0;
+    for(int i = 1;i<=N;i++)
+    {
+     int S,F;
+     scanf("%d %d",&S,&F);
+     for(int j = max(-F,0);j<=maxm;j++)
+      if(f[i-1][j] != -1)
+       f[i][j+F] = max(f[i-1][j+F],f[i-1][j]+S);
+      else
+       f[i][j+F] = f[i-1][j+F];
+    }
+    int ans = 0;
+    for(int i = 1;i<=maxm;i++)
+     if(f[N][i] != -1)
+     ans = max(f[N][i]+i,ans);
+    printf("%d",ans);
+    system("PAUSE");
+    return EXIT_SUCCESS;
+}
