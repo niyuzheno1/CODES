@@ -1,0 +1,26 @@
+#include "mode.h"
+
+using namespace std;
+const int MN = 210,MOD2 = 16777215;
+int main(int argc, char *argv[])
+{
+    freopen("sample.in","w",stdout);
+    int n = rand()%MN+1,m = rand()%MN+1;
+    printf("%d %d\n",n,m);
+    for(int i = 1;i<=n;++i)
+     printf("%d ",(rand()&MOD2));
+    printf("\n");
+    for(int i = 1;i<=m;++i)
+    {
+     int x = rand()%2;
+     if(x == 1)
+      printf("A %d\n",rand()&MOD2);
+     else{
+      int l = rand()%n+1,r = rand()%n+1;
+      if(l> r) swap(l,r);
+      printf("Q %d %d %d\n",l,r,rand()&MOD2);
+     }
+    }
+    closeIO();
+    return EXIT_SUCCESS;
+}

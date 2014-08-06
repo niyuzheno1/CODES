@@ -1,0 +1,36 @@
+#include "mode.h"
+uint64 n;
+bool isprime(uint64 x)
+{
+     if(x == 1) return false;
+     for(uint64 i = 2;i*i<=x;i++)
+      if(x % i == 0)
+       return false;
+     return true;
+}
+uint64 gcd(uint64 a,uint64 b)
+{
+       if(b == 0) return a;
+       return gcd(b,a%b);
+}
+int main(int argc, char *argv[])
+{
+    setIO("example");
+    int t;read<int>(t);
+    while(t--)
+    {
+     read<uint64>(n);
+     uint64 p = n;
+     uint64 e = n+1;
+     while(!isprime(p))
+      p--;
+     while(!isprime(e))
+      e++;
+     uint64 ans1 = p*e-2*e+2*(n-p+1),ans2 = 2*p*e;
+     uint64 tmp = gcd(ans1,ans2);
+     ans1/=tmp;ans2/=tmp;
+     printf("%I64d/%I64d\n",ans1,ans2);
+    }
+    closeIO();
+    return EXIT_SUCCESS;
+}

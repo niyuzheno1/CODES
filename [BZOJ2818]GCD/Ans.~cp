@@ -1,0 +1,96 @@
+#include "mode.h"
+/*const int N = 10000010;
+bitset<N> pr;
+int64 p[N];
+int64 phi[N];
+int64 f[N],k;
+void ip()
+{
+ pr.set();
+ for(int i = 2;i<=N;++i)
+  if(pr[i])
+  {
+   p[++k] = i;
+   for(int j = i+i;j<N;j+=i)
+    pr[j] = false;
+  }
+}
+void init()
+{
+  for(int i = 1;i<N;++i) phi[i] = i-1;
+  phi[0] = 0;
+  for(int i = 4;i<N;i+=2) phi[i] /= 2;
+  for(int i = 3;i<N;i+=2)
+   if(phi[i] == i-1)
+   {
+    for(int j = i+i;j<N;j+=i)
+     phi[j] /= i,phi[j]*=i-1;
+   }
+ f[1] = 0;
+ for(int i = 2;i<N;++i)
+  f[i] = f[i-1]+phi[i];
+}
+int64 n ;
+void solve()
+{
+ int64 ans = 0;
+ for(int i = 1;i<=k;++i)
+  if(p[i] > n)
+   break;
+  else
+   ans += f[n/p[i]]*2;
+ printf("%I64d\n",ans);
+}
+int main(int argc, char *argv[])
+{
+    setIO("sample");
+    ip();init();
+    n = gi;
+    solve();
+    closeIO();
+    return EXIT_SUCCESS;
+}*/
+#undef F
+#include <cstdio>
+#include <cstring>
+ 
+#define MAXN 10000001
+#define MAXM 1000001
+ 
+unsigned long long F[MAXN];
+bool f[MAXN];
+int n;
+int m[MAXM];
+unsigned long long ans=0;
+ 
+int main(){
+    scanf("%d",&n);
+    memset(f,true,sizeof(f));
+    for (int i=0;i++<n;){
+        F[i]=i;
+    }
+    F[0]=0;
+    F[1]=0;
+    f[1]=false;
+    m[0]=0;
+    for (int i=0;i++<n;){
+        if (f[i]){
+            m[++m[0]]=i;
+            F[i]=i-1;
+            for (int j=i*2;j<=n;j+=i){
+                F[j]/=i;
+                F[j]*=i-1;
+                f[j]=false;
+            }
+        }
+    }
+    for (int i=0;i++<n;){
+        F[i]=F[i-1]+F[i];
+    }
+    for (int i=0;i++<m[0];){
+        ans+=F[n/m[i]]*2;
+        ans++;
+    }
+    printf("%lld\n",ans);
+    return 0;
+}

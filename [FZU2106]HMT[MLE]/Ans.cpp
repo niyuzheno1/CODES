@@ -1,0 +1,48 @@
+#include "mode.h"
+const int64 N = 100000100,P = 5761461+10;
+bitset<N> p;
+char mu[N];
+int64 prime[P];
+int64 a[21];
+void init()
+{
+ int64 tot = 0;
+ mu[1] = p[1] = 1;
+ for(int64 i = 2;i<=N-10;++i)
+ {
+  if(!p[i]){prime[++tot] = i;mu[i] = -1;}
+  for(int64 j = 1;j<=tot;++j)
+  {
+  int64 y = prime[j];
+  if(i*y > (N-10)) break;
+  if(mu[i] && (i%y != 0))
+   mu[i*y] = mu[i]*mu[y];
+  p[i*y] = 1;
+  if(i%y == 0) break;
+  }
+ }
+}
+int main(int argc, char *argv[])
+{
+    setIO("sample");
+    init();
+    int64 T = gi;
+    while(T--)
+    {
+     int64 n = gi;
+     int64 minval = INF;
+     for(int64 i = 1;i<=n;++i)
+      a[i] = gi,minval = min(minval,a[i]);
+     int64 ans = 0;
+     for(int64 i = 1;i<=minval;++i)
+     {
+      int64 tmp = 1;
+      for(int64 j = 1;j<=n;++j)
+       tmp *= (a[j]/i);
+      ans += tmp*mu[i];
+     }
+     printf(I64D,ans);puts("");
+    }
+    closeIO();
+    return EXIT_SUCCESS;
+}

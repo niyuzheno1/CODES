@@ -1,0 +1,62 @@
+#include "mode.h"
+#include "data.h"
+
+const int MN = 1000010;
+int lef[MN*4],rig[MN*4],cnt[MN*4],tot;
+#define LEF(_t) lef[_t]
+#define RIG(_t) rig[_t]
+
+int build(TREE)
+{
+ if(_t == 0 ) _t = ++tot;
+ if(_l == _r) return _t;
+ M;LEF(_t) = build(LEFT);RIG(_t) = build(RIGHT);
+ return _t;
+}
+void mkc(TREE,int x)
+{
+ ++cnt[_t];if(_l == _r) return;
+ M;
+ if(x<=mid) 
+ mkc(LEFT,x); 
+ else 
+ mkc(RIGHT,x);
+}
+int delmin(TREE)
+{
+  --cnt[_t];
+  if(_l == _r) return _l;
+  M;
+  if(cnt[LEF(_t)]>0)return delmin(LEFT);
+  else if(cnt[RIG(_t)]>0)return delmin(RIGHT);
+  return 0;
+}
+int delmax(TREE)
+{
+ --cnt[_t];
+ if(_l == _r) return _r;
+ M;
+ if(cnt[RIG(_t)]>0)return delmax(RIGHT);
+ else if(cnt[LEF(_t)]>0)return delmax(LEFT);
+ return 0;
+}
+int main(int argc, char *argv[])
+{
+    tot = 1;
+    setIO("sample");
+    int n = gi;
+    build(1,1,MN-10);
+    int ans = 0;
+    for(int i = 1;i<=n;++i)
+    {
+     int k = gi;
+     for(int j = 1,u=0;j<=k;++j)
+      u = gi,mkc(1,1,MN-10,u);
+     int fx = delmin(1,1,MN-10);
+     int fy = delmax(1,1,MN-10);
+     ans += fy-fx;
+    }
+    printf("%d\n",ans);
+    closeIO();
+    return EXIT_SUCCESS;
+}

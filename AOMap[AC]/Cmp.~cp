@@ -1,0 +1,18 @@
+#include "mode.h"
+
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+    while(true)
+    {
+    system("data");
+    system("brute");
+    system("cp AOMap.out AOMap.ans");
+    system("time<enter");
+    system("ans");
+    system("time<enter");
+    system("fc AOMap.out AOMap.ans");
+    }
+    return EXIT_SUCCESS;
+}

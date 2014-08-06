@@ -1,0 +1,7 @@
+1: two:1 one:0 zero:2 tir:3 delta:0
+2: two:1 one:0 zero:0 tir:0 delta:0
+3: two:0 one:0 zero:2 tir:3 delta:0
+4: two:0 one:0 zero:0 tir:0 delta:0
+5: two:0 one:1 zero:0 tir:0 delta:1
+6: two:0 one:0 zero:2 tir:0 delta:0
+7: two:0 one:0 zero:0 tir:3 delta:0

@@ -1,0 +1,41 @@
+#include "mode.h"
+#include "data.h"
+using namespace std;
+const int MN = 200010;
+int n,b[MN],c[MN],s[MN],d,k,e[MN],mu;
+pii a[MN];
+vector<int> l;
+int get(int x)
+{
+ int ans = 0;
+ for(;x;x-=lb(x))
+  ans = max(ans,e[x]);
+ return ans;
+}
+
+void ins(int x,int y)
+{
+ for(;x<=mu;x+=lb(x))
+  c[x] = max(e[x],y);
+}
+int main(int argc, char *argv[])
+{
+    setIO("sample");
+    n = gi;
+    for(int i = 1;i<=n;++i)
+    {
+     char c = 0;while(c != 'N' && c != 'K') c = getchar();
+     if(c == 'N') ++k;
+     else{++d;a[d].X = gi;a[d].Y = i;s[d]= k;l.pb(-s[d]+a[d].X); l.pb(-s[d]+a[d].X+1);}
+    }
+    sort(l.begin(),l.end());
+    unique(l.begin(),l.end());
+    
+    for(int i = 1;i<=d;mu=max(mu,b[i]),++i)
+     b[i] = lower_bound(l.begin(),l.end(),-s[i]+a[i].X)-l.begin()+1;
+    for(int i = 1;i<=d;mu=max(mu,c[i]),++i)
+     c[i] = lower_bound(l.begin(),l.end(),-s[i]+a[i].X+1)-l.begin()+1;
+    
+    closeIO();
+    return EXIT_SUCCESS;
+}

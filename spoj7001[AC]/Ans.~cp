@@ -1,0 +1,50 @@
+#include "mode.h"
+
+
+const int MN = 1000100;
+int prime[MN],mu[MN],p[MN],tot;
+int pbreak = 0;
+void callbreak()
+{
+ pbreak = 1;
+}
+void init()
+{
+ mu[1] = 1;
+ tot = 0;
+ p[1] = 1;
+ for(int i = 2;i<MN;++i)
+ {
+  if(i == 30)
+   callbreak();
+  if(!p[i]) mu[i] = -1,prime[++tot] = i;
+  for(int j = 1;j<=tot;++j)
+  {
+   if(i*prime[j] > MN) break;
+   if(i*prime[j] == 30)
+     callbreak();
+   if(mu[i] && !(i%prime[j] == 0)){
+    mu[i*prime[j]] = mu[i]*mu[prime[j]];
+   }
+   p[i*prime[j]] = 1;
+   if(i%prime[j] == 0) break;
+  }
+ }
+ show1D(int,mu);
+}
+int main(int argc, char *argv[])
+{
+    setIO("sample");
+    int t=gi;
+    init();
+    while(t--)
+    {
+     int n = gi;
+     int ans = 3;
+     for(int i = 1;i<=n;++i)
+      ans += (n/i)*(n/i)*((n/i)+3)*mu[i];
+     printf("%d\n",ans);
+    }
+    closeIO();
+    return EXIT_SUCCESS;
+}

@@ -1,0 +1,7 @@
+1:Left:0 Right:0 Father:4 size:1
+1:Left:7 Right:6 Father:0 size:4
+7:Left:0 Right:0 Father:1 size:1
+6:Left:0 Right:4 Father:1 size:2
+4:Left:0 Right:0 Father:6 size:1
+1:Left:7 Right:0 Father:6 size:2
+7:Left:0 Right:0 Father:1 size:1

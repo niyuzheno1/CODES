@@ -1,0 +1,12 @@
+number 1 : col:1 len:1 len1:1 P:0.00000
+number 2 : col:1 len:1 len1:2 P:0.50000
+number 3 : col:1 len:1 len1:3 P:0.00000
+number 4 : col:1 len:2 len1:2 P:0.00000
+number 5 : col:1 len:3 len1:3 P:0.00000
+number 6 : col:1 len:4 len1:4 P:0.00000
+number 7 : col:2 len:1 len1:1 P:0.00000
+number 8 : col:2 len:1 len1:2 P:0.00000
+number 9 : col:2 len:1 len1:3 P:0.00000
+number 10 : col:2 len:2 len1:2 P:0.25000
+number 11 : col:2 len:3 len1:3 P:0.25000
+number 12 : col:2 len:4 len1:4 P:0.00000

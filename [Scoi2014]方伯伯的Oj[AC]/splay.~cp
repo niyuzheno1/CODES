@@ -1,0 +1,82 @@
+#include "mode.h"
+#include "data.h"
+
+using namespace std;
+
+const int MN = 1010;
+#define mkc(t,l,r,ll,rr,cc)
+struct ttype {int C[3];};
+ttype t[MN];
+int SUM[MN],right_range[MN],left_range[MN],root,Vv,n;
+#define S(_t) SUM[_t]
+#define RR(_t) right_range[_t]
+#define LL(_t) left_range[_t]
+#define UPD(_t,_x,_y) _t = _x , t[_t].F = _y;
+void _initsplay(){
+     CLEAR(t,0);CLEAR(SUM,0);CLEAR(right_range,0);CLEAR(left_range,0);
+     Vv = root = 1,S(1) = n,LL(1) = 1,RR(1) = n;
+}
+void upd(int u)
+{
+ if(u != 0) S(u) = S(t[u].L)+S(t[u].R)+RR(u)-LL(u)+1;
+}
+void rotate(int x)
+{
+     int y = t[x].F;int z = t[y].F;int d1 = (t[y].L == x);int d2 = (t[z].R == x);
+     UPD(t[y].C[!d1],t[x].C[d1],y);UPD(t[x].C[d1],y,x);UPD(t[z].C[d2],x,z);
+     upd(y);upd(x);upd(z);
+}
+void splay(int x,int v)
+{
+     while(t[x].F != v)
+     {int y = t[x].F; int z = t[y].F;
+      if(z != v && (t[y].L == x)==(t[z].L == y)) rotate(y);
+      rotate(x);}
+     if(!v) root = x;
+     upd(x);
+}
+void Get(int p,int x){
+ splay(x,0);
+ if(LL(x) < p){
+  int k = ++Vv;
+  LL(k) = LL(x),RR(k) = p-1;
+  upd(t[t[k].L = t[x].L].F = k);
+  upd(t[t[x].L = k].F = x);
+  mkc(1,1,N,LL(k),RR(k),k);
+ }
+ if(RR(x) > p){
+  int k = ++Vv;
+  LL(k) = p+1,RR(k) = RR(x);
+  upd(t[t[k].R = t[x].R].F = k);
+  upd(t[t[x].R = k].F = x);
+  mkc(1,1,N,LL(k),RR(k),k);
+ }
+ LL(x) = RR(x) = p;
+}
+int Max(int x){
+     for(;t[x].R;x = t[x].R);
+     return x;
+}
+int Min(int x){
+     for(;t[x].L;x = t[x].L);
+     return x;
+}
+int Select(int s){
+ int x;
+ for(x = root;;){
+  if(s >= S(t[x].L) && s-S(t[x].L) < RR(x)-LL(x)+1)
+  { s-=S(t[x].L);break;}
+  if(s < S(t[x].L)) x = t[x].L;
+  else  s-=S(t[x].L)+RR(x)-LL(x)+1, x = t[x].R;
+  
+ }
+ splay(x,0);
+ return LL(x)+s;
+}
+int main(int argc, char *argv[])
+{
+    setIO("splay");
+    
+    closeIO();
+    return EXIT_SUCCESS;
+}

@@ -1,0 +1,48 @@
+#include "mode.h"
+const int MN  = 100010;
+int n , m , p[ MN ] , prime[ MN ] , mu [ MN ] ,sum [ MN ];
+int N =  0;
+void init ()
+{
+ int tot = 0;
+ p[ 1 ] = mu[ 1 ] = 1;
+ for (int i  = 2; i<= N ; ++i)
+ {
+  if(!p[i]) { prime[ ++tot ] = i;mu[ i ] = -1;}
+  for(int j = 1;j<=tot;++j)
+  {
+   int t = prime[ j ];
+   if(t * i > N ) break;
+   if(mu[i] != 0&&(i % t != 0))
+    mu[i*t] = mu[i] * mu[t] ;
+   p[i*t] = 1;
+   if(i % t == 0) break;
+  }
+ }
+ for(int i = 1;i<=N;++i)
+  sum[i] = sum[i-1] + mu[i];
+}
+int query(int a,int b)
+{
+    int uf = min(a,b);
+    int ret = 0;
+    for(int i = 1,last = 0;i<=uf;i+=last+1)
+    {
+     last = min(a/(a/i),b/(b/i));
+     ret += (sum[last]-sum[i-1])*(a/i)*(b/i);
+    }
+    return ret;
+}
+int main(int argc, char *argv[])
+{
+    setIO("sample");
+    n = gi; m = gi;N = max(n,m);
+    init();
+    int uf = min(n,m),ans = 0;
+    for(int i = 1;i<=uf;++i)
+     ans += i*query(n/i,m/i);
+    ans *= 2;ans -= n*m;
+    printf("%d\n",ans);
+    closeIO();
+    return EXIT_SUCCESS;
+}

@@ -1,0 +1,10 @@
+#include "mode.h"
+
+
+int main(int argc, char *argv[])
+{
+    setIO("QTREE7");
+    
+    closeIO();
+    return EXIT_SUCCESS;
+}

@@ -1,0 +1,62 @@
+#include "mode.h"
+const int MN = 11,mod = 9973; 
+int n ,k;
+class mat
+{
+public:
+ int a[MN][MN];
+ mat()
+ {
+ CLEAR(a,0);
+ }
+ void operator =(mat y) 
+ {
+  for(int i = 1;i<=n;++i)
+   for(int j = 1;j<=n;++j)
+    a[i][j] = y.a[i][j];
+ }
+ mat operator *(mat & y)
+ {
+  mat tmp; 
+  for(int k = 1;k<=n;++k)
+   for(int i = 1;i<=n;++i)
+    for(int j = 1;j<=n;++j)
+     tmp.a[i][j] += (a[i][k])%mod*(y.a[k][j])%mod,tmp.a[i][j] %= mod;
+  return tmp;
+ }
+};
+bool flag;
+mat m;
+void PowM(mat & u,int x)
+{
+ mat a=m,b=m;
+ while(x)
+ {
+  if(x & 1)
+   b = b*a;
+  x/=2;
+  a = (a*a);
+ }
+ u = b;
+}
+int main(int argc, char *argv[])
+{
+    setIO("sample");
+    int T =gi;
+    
+    while(T--)
+    {
+     n = gi; k = gi;flag = 0;
+     for(int i = 1;i<=n;++i)
+      for(int j = 1;j<=n;++j)
+       m.a[i][j] = gi;
+      mat a;
+      PowM(a,k);
+      int ans = 0;
+      for(int i = 1;i<=n;++i)
+       ans += a.a[i][i],ans%=mod;
+      printf("%d\n",ans);
+    }
+    closeIO();
+    return EXIT_SUCCESS;
+}

@@ -1,0 +1,54 @@
+#include "mode.h"
+#define pf push_front
+#define pb push_back
+#define pof pop_front
+#define pob pop_back
+const int MN = 100010;
+int n,a[MN],f[MN],h[MN],ans = 0;
+deque<int> q;
+int main(int argc, char *argv[])
+{
+    setIO("tower");
+    n = gi;
+    for(int i = 1;i<=n;++i)
+     a[i] = gi;
+    for(int i = 1;i<=n+1;++i)
+     a[i] = a[i-1]+a[i];
+    q.push_front(n+1);
+    for(int i = n;i>=0;--i)
+    {
+     while(!q.empty())
+     {
+      int x = q.front();q.pof();
+      if(q.empty()){
+       q.pf(x);
+       break;
+      }else{
+       int y = q.front();q.pof();
+       if(a[x] >= a[y] && a[i]<=a[y]-f[y] && h[x] <= h[y])
+        q.pf(y);
+       else
+       { 
+       q.pf(y),q.pf(x);
+       break;
+       }
+      }
+     }
+     f[i] = a[q.front()]-a[i];
+     h[i] = h[q.front()]+1;
+     ans = max(ans,h[i]);
+     while(!q.empty()){
+      int x = q.back();q.pob();
+      if(a[x]-f[x] < a[i]-f[i] && a[x]>=a[i] && h[x] <= h[i])
+       continue;
+      else{
+       q.pb(x);
+       break;
+      }
+     }
+     q.pb(i);
+    }
+    printf("%d\n",ans-1);
+    closeIO();
+    return EXIT_SUCCESS;
+}
