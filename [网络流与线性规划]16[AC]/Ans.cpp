@@ -1,0 +1,96 @@
+#include "mode.h"
+#undef INF
+#define MN 1010
+#define MM 500010
+#define  INF 0x7f7f7f7f
+int tttt[5];
+int st[MN];
+struct _edge {
+       int n,v,f,upp,c;
+};
+_edge lk[MM];
+#define tot tttt[0]
+void init(){tot = 1;CLEAR(st,0xff);}
+void ad(int x,int y,int z,int w) {++tot,lk[tot].v = y,lk[tot].f = z,lk[tot].n = st[x],lk[tot].c = w,st[x] = tot;}
+#undef tot
+void add(int x,int y,int z,int w){ad(x,y,z,w);ad(y,x,0,-w);}
+int a[MN][MN],b[MN][MN][2],n,m,d[MN],pre[MN];
+bool spfa(int s,int t)
+{
+     for(int i = s;i<=t;++i) d[i] = -INF,pre[i] = 0;
+     queue<int> q;
+     q.push(s);d[s] = 0;
+     while(!q.empty())
+     {
+      int x = q.front();q.pop();
+      TRA(i,x)
+       if(pre[x]^1 != i && lk[i].f > 0 && d[lk[i].v]<lk[i].c+d[x]){
+        d[lk[i].v]=lk[i].c+d[x];
+        q.push(lk[i].v);
+        pre[lk[i].v] = i;
+       }
+     }
+     return d[t] > -INF;
+}
+void aug(int & ans,int s,int t){
+ int mf = 0x7f7f7f7f,cost = 0;
+ for(int i = pre[t];i;i=pre[lk[i^1].v])
+  mf = min(mf,lk[i].f),cost += lk[i].c; 
+ ans += mf*cost;
+ for(int i = pre[t];i;i=pre[lk[i^1].v])
+  lk[i].f -= mf,lk[i^1].f += mf;
+}
+int main(int argc, char *argv[])
+{
+    setIO("sample");init();
+    scanf("%d%d",&m,&n);
+    int S = 1,T;
+    #define tot tttt[1]
+    tot = 1;
+    for(int i = 1;i<=n;++i)
+     for(int j = 1;j<=m+i-1;++j)
+      scanf("%d",&a[i][j]),b[i][j][0] = ++tot,b[i][j][1] = ++tot;
+    T = tot+1;
+    #undef tot
+    for(int i = 1;i<=m;++i) add(S,b[1][i][0],1,a[1][i]);
+    for(int i = 1;i<=m+n-1;++i) add(b[n][i][1],T,1,0);
+    for(int i = 1;i<=n;++i)
+      for(int j = 1;j<=m+i-1;++j)
+       add(b[i][j][0],b[i][j][1],1,0);
+    for(int i = 1;i<n;++i)
+     for(int j = 1;j<=m+i-1;++j){
+      add(b[i][j][1],b[i+1][j][0],1,a[i+1][j]);
+      add(b[i][j][1],b[i+1][j+1][0],1,a[i+1][j+1]);
+     }
+    
+    int ans = 0;
+    while(spfa(S,T))
+     aug(ans,S,T);
+    printf("%d\n",ans);
+    init();
+    for(int i = 1;i<=m;++i) add(S,b[1][i][0],1,a[1][i]);
+    for(int i = 1;i<=m+n-1;++i) add(b[n][i][0],T,2,0);
+    for(int i = 1;i<n;++i)
+     for(int j = 1;j<=m+i-1;++j){
+      add(b[i][j][0],b[i+1][j][0],1,a[i+1][j]);
+      add(b[i][j][0],b[i+1][j+1][0],1,a[i+1][j+1]);
+     }
+    ans = 0;
+    while(spfa(S,T))
+     aug(ans,S,T);
+    printf("%d\n",ans);
+    init();
+    for(int i = 1;i<=m;++i) add(S,b[1][i][0],1,a[1][i]);
+    for(int i = 1;i<=m+n-1;++i) add(b[n][i][0],T,INF,0);
+    for(int i = 1;i<n;++i)
+     for(int j = 1;j<=m+i-1;++j){
+      add(b[i][j][0],b[i+1][j][0],INF,a[i+1][j]);
+      add(b[i][j][0],b[i+1][j+1][0],INF,a[i+1][j+1]);
+     }
+    ans = 0;
+    while(spfa(S,T))
+     aug(ans,S,T);
+    printf("%d\n",ans);
+    closeIO();
+    return EXIT_SUCCESS;
+}

@@ -1,0 +1,50 @@
+#include "mode.h"
+#define MC 23
+#define MM 110
+int n,m;
+char buf1[MC],buf2[MC];
+int b1[MM],b2[MM],f1[MM],f2[MM],t[MM];
+int dis[1<<MC];
+void mem(char * a,int & b,int & c)
+{
+ for(int i = 1;i<=n;++i)
+ {
+  if(a[i] == '+')
+   b |= 1<<(i-1);
+  if(a[i] == '-')
+   c |= 1<<(i-1);
+ }
+}
+int main(int argc, char *argv[])
+{
+    setIO("sample");
+    scanf("%d%d",&n,&m);
+    for(int i = 1;i<=m;++i){
+     scanf("%d%s%s",&t[i],buf1+1,buf2+1);
+     mem(buf1,b1[i],b2[i]);
+     mem(buf2,f2[i],f1[i]);
+    }
+    queue<int> q;q.push((1<<n)-1);
+    int st = (1<<n)-1;
+    while(!q.empty())
+    {
+     int x = q.front();q.pop();
+     if(x == 0) continue;
+     for(int i = 1;i<=m;++i){
+      int fl1 = x & b1[i];
+      int fl2 = x & b2[i];
+      if(fl1 == b1[i] && fl2 == 0){
+       int y = x|f1[i];
+       y = y ^ f1[i];
+       y = y | f2[i];
+       if((dis[y] == 0 && y !=  st) || (dis[y] > dis[x] + t[i])){
+       dis[y] = dis[x] + t[i];
+       q.push(y);
+       }
+      }
+     }
+    }
+    printf("%d\n",dis[0]);
+    closeIO();
+    return EXIT_SUCCESS;
+}
