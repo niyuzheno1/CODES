@@ -1,0 +1,36 @@
+#include "mode.h"
+int gcd(int x,int y)
+{
+    if(y == 0) return x;
+    return gcd(y,x%y);
+}
+#define MN 100010
+int a[MN],vis[MN];
+
+int main(int argc, char *argv[])
+{
+    setIO("sample");
+    int T;
+    scanf("%d",&T);
+    while(T--)
+    {
+     int n;scanf("%d",&n);CLEAR(vis,0);
+     for(int i =1;i<=n;++i) scanf("%d",&a[i]);
+     int ret = 1;
+     for(int i =1;i<=n;++i)
+     if(!vis[i]){
+             vis[i] = 1;
+             int s = 1;
+             int u = a[i];
+             while(!vis[u])
+             {
+              vis[u] = 1;
+              ++s;u = a[u];
+             }
+     ret = (ret*s)/gcd(ret,s);
+     }
+     printf("%d\n",ret);
+    }
+    closeIO();
+    return EXIT_SUCCESS;
+}

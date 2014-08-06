@@ -1,0 +1,13 @@
+#include "mode.h"
+#include "data.h"
+typedef long long LL;
+int main(int argc, char *argv[])
+{
+     double ans = 0 ;
+    for(LL i = 1;i<=400000;++i)
+     ans += double(lb(i))+double(lb(i))*log(double(lb(i)))/log(2.0);
+    
+    printf("%f",ans);
+    system("PAUSE");
+    return EXIT_SUCCESS;
+}

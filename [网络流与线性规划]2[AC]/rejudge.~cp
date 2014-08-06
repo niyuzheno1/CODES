@@ -1,0 +1,27 @@
+#include "mode.h"
+
+using namespace std;
+#define TEST 3
+char str[50];
+void gotou(int & x)
+{
+     sprintf(str,"cp shut%d.in sample.in",x);
+     system(str);
+     sprintf(str,"cp shut%d.out sample.ans",x);
+     system(str);
+}
+int main(int argc, char *argv[])
+{
+    for(int i = 3;i<=TEST;++i)
+    {
+     gotou(i);
+     system("ans");
+     if(system("spj"))
+      printf("WA:%d\n",i);
+     else
+      printf("AC\n");
+     
+    }
+    system("PAUSE");
+    return EXIT_SUCCESS;
+}

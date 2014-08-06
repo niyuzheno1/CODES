@@ -1,0 +1,95 @@
+#include "mode.h"
+typedef long long ll;
+#define MM 10001
+#define ML 1<<15
+const ld PI = acos(-1.0);
+int m,N,K;
+ll n;
+int a[MM],b[MM];
+
+struct cx{
+       ld a,b;
+       cx(ld _a=0.0,ld _b = 0.0):a(_a),b(_b){}
+       friend cx operator + (const cx & x, const cx & y){
+        return cx(x.a+y.a,x.b+y.b);
+       }
+       friend cx operator - (const cx & x, const cx & y){
+        return cx(x.a-y.a,x.b-y.b);
+       }
+       friend cx operator * (const cx & x, const cx & y){
+        return cx(x.a*y.a-x.b*y.b,x.a*y.b+x.b*y.a);
+       }
+}A[ML],B[ML],C[ML];
+
+void fft(cx p[],int n,int oper){
+  for(int i = 1,j=0;i<n-1;++i){
+    for(int s = n;j^=s>>=1,~j & s;);
+    if(i < j) swap(p[i],p[j]);
+  }
+  cx up0;
+  for(int d = 0;(1<<d)<n;++d){
+   int m = 1<<d,m2 = m*2;
+   double p0 = PI/m*oper;
+   up0 = cx(cos(p0),sin(p0));
+    for(int i = 0 ;i<n;i+=m2){
+     cx u = 1;
+     for(int j = 0;j<m;++j){
+      cx & p1 = p[i+j+m],&p2 = p[i+j];
+      cx t = u * p1;p1 = p2 - t;p2 = p2 + t;
+      u = u * up0;
+     }
+    }
+  }
+}
+
+void mut(int a[],int b[],int flag){
+ if(flag){
+  for(int i = 0;i<N;++i) A[i] = C[i] = 0.0;
+  for(int i = 0;i<m;++i) A[i] = a[i];
+  fft(A,N,1);
+  for(int i = 0;i<N;++i) C[i] = A[i]*A[i];
+  fft(C,N,-1);
+ }
+ else{
+  for(int i = 0;i<N;++i) A[i] = B[i] = C[i] = 0.0;
+  for(int i = 0;i<m;++i) A[i] = a[i],B[i] = b[i];
+  fft(A,N,1);fft(B,N,1);
+  for(int i = 0;i<N;++i) C[i] = A[i]*B[i];
+  fft(C,N,-1);
+ }
+ for(int i = 0;i<m;++i){
+  a[i] = (int)((C[i].a/N)+0.5);
+  a[i] %= 19;
+ }
+}
+void pow(int a[],ll k){
+ static int res[MM],t[MM];
+ res[0] = -1;
+ for(int i = 0;i<m;++i) t[i] = a[i];
+ while(k){
+  if(k & 1){
+   if(res[0] == -1)    for(int i = 0;i<m;++i) res[i] = t[i];
+  else mut(res,t,0);
+  }
+  k>>=1;
+  if(k == 0) break;
+  mut(t,t,1);
+ }
+ for(int i = 0;i<m;++i) a[i]= res[i];
+}
+
+int main(int argc, char *argv[])
+{
+    setIO("sample");
+    n = gi,m = gi,K = gi;
+    for(int i = 0;i<m;a[i] = gi,++i);
+    for(int i = 0;i<K;b[i] = gi,++i);
+    for(N = 1;N<(m<<1);N<<=1);
+    pow(b,n-1);
+    mut(a,b,0);
+    for(int i = 0;i<m;++i)
+     printf(i==0?"%d":" %d",a[i]); 
+    puts("");
+    closeIO();
+    return EXIT_SUCCESS;
+}

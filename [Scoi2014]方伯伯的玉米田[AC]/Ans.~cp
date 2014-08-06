@@ -1,0 +1,45 @@
+#include "mode.h"
+#include "data.h"
+#define MN 10010
+#define MK 6000
+#define MKK 610
+int a[MN];
+int n,k;
+int f[MN][MKK];
+struct T1
+{
+ int b[MK];
+ void add(int x,int y)
+ {
+  ++x;
+  for(int i = x;i<MK;b[i] = max(y,b[i]),i+=lb(i));
+ }
+ int query(int x)
+ {
+  ++x;
+  int ret = 0;
+  for(int i = x;i;ret = max(ret,b[i]),i-=lb(i));
+  return ret;
+ }
+};
+T1 t;
+int main(int argc, char *argv[])
+{
+    setIO("sample");
+    n = gi,k = gi;
+    for(int i = 1;i<=n;a[i]=gi,++i);
+    for(int i = 1;i<=n;++i)
+    {
+     for(int j = 0;j<=k;++j)
+      f[i][j] = t.query(a[i]+j)+1;
+     for(int j = 0;j<=k;++j)
+      t.add(a[i]+j,f[i][j]);
+    }
+    int ans = 0;
+    for(int i = 1;i<=n;++i)
+     for(int j = 0;j<=k;++j)
+      ans = max(ans,f[i][j]);
+    printf("%d\n",ans);
+    closeIO();
+    return EXIT_SUCCESS;
+}

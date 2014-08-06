@@ -1,0 +1,44 @@
+#include "mode.h"
+#define MM 40
+typedef long long LL;
+int prime[MM],p[MM],tot;
+void si()
+{
+     for(int i = 2;i<MM;++i)
+     {
+      if(!p[i])++tot,prime[tot]=i;
+      for(int j = 1;j<=tot;++j)
+      {
+       int u = prime[j]*i;
+       if(u >= MM)break;
+       p[u] = 1;
+       if(u % i == 0) break;
+      }
+     }
+}
+LL ans = 0,cnt = 0,n;
+void dfs(LL x,LL y,LL z,LL w)
+{
+     if(x == 12)
+     {
+      if(y > ans && z>cnt){ans = y;cnt = z;}
+      if(y <= ans && z >= cnt){ans = y;cnt = z;}
+      return;
+     }
+     LL t = 1;
+     for(int i = 0;i<=w;++i)
+     {
+      dfs(x+1,y*t,z*(i+1),i);
+      t *= prime[x];
+      if(y*t>n)break;
+     }
+}
+int main(int argc, char *argv[])
+{
+    setIO("sample");
+    n = gi;si();
+    dfs(1,1,1,12);
+    printf("%d\n",ans);
+    closeIO();
+    return EXIT_SUCCESS;
+}
