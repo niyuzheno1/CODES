@@ -1,0 +1,87 @@
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <cstdlib>
+#include <set>
+using namespace std;
+typedef long long LL;
+const int maxn = 1000010;
+int a[maxn], f[maxn], num[maxn], ans[maxn], pos[maxn];
+set <int> s;
+LL n, k;
+void get(int &tmp) {
+    tmp = 0;
+    char ch = getchar();
+    for(; ch < '0' || ch > '9'; ch = getchar());
+    for(; ch >= '0' && ch <= '9'; ch = getchar()) tmp = tmp * 10 + ch - '0';
+    return;
+}
+void update(int x) {
+    while(x <= n) {
+        num[x] ++;
+        x += x & -x;
+    }
+    return;
+}
+int sum(int x) {
+    int res = 0;
+    while(x) {
+        res += num[x];
+        x -= x & -x;
+    }
+    return res;
+}
+LL solve(int x) {
+    LL res = 0;
+    for(int i = 1; i <= n; i ++) {
+        res += (LL)min(x, f[i]);
+    }
+    return res;
+}
+int main() {
+    freopen("sample.in","r",stdin);
+    freopen("sample.out","w",stdout);
+    cin >> n >> k;
+    for(int i = 1; i <= n; i ++) {
+        get(a[i]);
+        pos[a[i]] = i;
+    }
+    for(int i = 1; i <= n; i ++) {
+        f[a[i]] = sum(n + 1 - a[i]);
+        update(n + 1 - a[i]);
+    }
+    if(solve(n - 1) < k) {
+        printf("Impossible!\n");
+        return 0;
+    }
+    int l = 0, r = n - 1;
+    while(l < r) {
+        int mid = (l + r + 1) >> 1;
+        if(solve(mid) <= k) l = mid;
+        else r = mid - 1;
+    }
+    printf("%d\n",l);
+    k -= solve(l);
+    for(int i = 1; i <= n; i ++) {
+        f[i] -= l;
+        if(f[i] < 0) f[i] = 0;
+    }
+    for(int i = 1; i <= n; i ++) s.insert(i);
+    for(int i = 1; i <= n; i ++) {
+        set <int> :: iterator p = s.lower_bound(pos[i] - l);
+        ans[*p] = i;
+        s.erase(p);
+    }
+    for(int i = 1; i < n; i ++) {
+        if(!k) break;
+        if(ans[i] > ans[i + 1]) {
+            swap(ans[i], ans[i + 1]);
+            k --;
+        }
+    }
+    for(int i = 1; i < n; i ++) printf("%d ", ans[i]);
+    printf("%d\n", ans[n]);
+    fclose(stdin);fclose(stdout);
+    return 0;
+}

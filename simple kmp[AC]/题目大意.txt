@@ -1,0 +1,6 @@
+已知两个串a,b求b在a中出现的前端位置
+input:
+aaaabbbb
+ab
+output:
+4

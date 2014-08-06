@@ -1,0 +1,157 @@
+#include "mode.h"
+#include "data.h"
+#define TRA2(x,y) for(int64 x = st[y];~x;x = lk[x].n) if(lk[x].f==2)
+#define MN 100010*400
+#define ML 20
+const int64 MA = int64(10e9);
+int64 o1[MN],o2[MN],sum[MN],cnt[MN],s,lstans,tote,tot;
+#define LEF(_t) o1[_t]
+#define RIG(_t) o2[_t]
+#define S(_t) sum[_t]
+#define C(_t) cnt[_t]
+void decode(int64 & x,int64 & y)
+{
+     x = (lstans & s)^x;
+     y = (lstans & s)^y;
+}
+void ins(TREE2,int64 x)
+{
+ if(x == 0) return;
+ int64 p = ++SIZE(o1);
+ if(_t != 0) LEF(p)=LEF(_t),RIG(p)=RIG(_t),S(p)=S(_t),C(p)=C(_t);
+ S(p) += x;++C(p);_t = p;
+ if(_t == 32)
+  _t = 32;
+ if(_l == _r) 
+  return;
+ M;
+ if(x <= mid) ins(LEFT,x); else ins(RIGHT,x);
+}
+int64 query(TREE,int64 l,int64 r)
+{
+    if(_t == 0 ) return 0;
+    if(l<=_l && _r <= r) 
+     return S(_t);
+    M;int64 ret = 0;
+    if(l <= mid) ret += query(LEFT,l,r);if(r >  mid) ret += query(RIGHT,l,r);
+    return ret;
+}
+#undef MN
+#define MN 100010*5
+
+struct edge{
+       int64 u,v,w;
+       bool operator < (edge x) const
+       {
+        return w < x.w;
+       }
+};
+edge e[MN];
+void add(int64 x,int64 y,int64 z)
+{
+ ++tote,e[tote].u = x,e[tote].v = y,e[tote].w = z;
+}
+struct data{
+ int64 v,f,n;
+};
+data lk[MN];
+int64 st[MN],a[MN],f[MN*2][ML],w[MN],qu[MN],dfs[MN],dfn[MN],pre[MN],rt[MN],fa[MN*2];
+void add2(int64 x,int64 y)
+{
+lk[SIZE(st)].v = y;lk[SIZE(st)].n = st[x];st[x] = SIZE(st);++SIZE(st);
+}
+int64 gf(int64 x)
+{
+    int64 u = x;
+    while(fa[u] != 0) u = fa[u];
+    while(fa[x] != 0) 
+    {
+    int y = fa[x];
+    fa[x] = u,x=y;
+    }
+    return u;
+}
+void dpri(int64 u)
+{
+     ff(debug,"Node %d:\n",u);
+     int64 son = 0;
+     TRA(x,u)
+      ff(debug,"SON%d: %d\n",++son,lk[x].v);
+     TRA(x,u)
+     dpri(lk[x].v);
+}
+int main(int argc, char *argv[])
+{
+    setIO("sample");CLEAR(st,0xff);st[0] = 0;
+    int64 n=gi,m = gi,q=gi;s = gi;
+    for(int64 i = 1;i<=n;++i) a[i] = gi;
+    for(int64 i = 1,x,y,z;i<=m;++i) x = gi,y=gi,z = gi,add(x,y,z);
+    tot = n;sort(e+1,e+tote+1);
+    for(int64 i = 1,u,v;i<=tote;++i)
+    {
+     u = gf(e[i].u);v = gf(e[i].v);
+     if(u == v) continue;++tot;w[tot] = e[i].w;add2(u,tot);add2(tot,u);add2(v,tot);add2(tot,v);fa[u] = tot;fa[v] = tot;
+    }
+    qu[SIZE(qu)=1] = tot;
+    for(int64 i = 1,u;i<=SIZE(qu);++i)
+     TRA(x,u=qu[i])
+     {
+      int64 v = lk[x].v;f[v][0] = u;++SIZE(qu);qu[SIZE(qu)] = v;lk[x^1].f = 1;
+     }
+    //dpri(tot);
+    w[0] = INF;
+    for(int64 i = 1,u;i<=SIZE(qu);++i)
+    {
+     int64 x = qu[i];
+     for(int64 j = 1;j<ML;++j)
+      f[x][j] = f[f[x][j-1]][j-1];
+    }
+    //get dfs
+    memset(qu,0,sizeof(qu));
+    qu[SIZE(qu) = 1] = tot;
+    int64 ti = 1;dfn[tot] = ti;
+    for(int64 i = SIZE(qu);i>0;--i)
+    {
+     int64 u  = qu[i] ,v = 0 ;
+     if(!dfn[qu[i]])++ti,dfs[ti] = u,dfn[u] = ti,pre[u]=ti;
+     TRA(x,u)
+     {
+      v = lk[x].v;
+      lk[x].f = 2;
+      ++SIZE(qu);qu[SIZE(qu)] = v;
+     }
+     TRA2(x,u)
+     {
+      int64 uu = lk[x].v;
+      pre[u] = max(pre[u],pre[uu]);
+     }
+     if(v == 0)--SIZE(qu);
+     i = SIZE(qu)+1;
+    }
+    dfs[1] = tot;
+    for(int64 i = 1;i<=ti;++i)
+     rt[i] = rt[i-1],ins(rt[i],1,MA,a[dfs[i]]);
+    for(int64 i = 1;i<=q;++i)
+    {
+     if(i == 3) 
+      i = 3;
+     int64 x = gi,y = gi;
+     decode(x,y);
+     int64 now;
+     int64 l,r;
+     for(int64 j=ML-1;j>=0;--j)
+      if(w[f[x][j]] < y)
+       x = f[x][j];
+     while(w[f[x][0]] <= y) x = f[x][0];
+     l = dfn[x];r = pre[x];
+     for(now = 1;;now++)
+     {
+      int64 s = query(rt[r],1,MA,1,now)-query(rt[l-1],1,MA,1,now);
+      if(s == now-1) break;
+      else now = s;
+     }
+     printf(I64D,lstans=now);puts("");
+    }
+    closeIO();
+    return EXIT_SUCCESS;
+}

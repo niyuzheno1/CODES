@@ -1,0 +1,13 @@
+已知n个物品，第i个物品数量任意，体积为wi,价值为vi
+问m次:去掉k号物品，并有个容量V(始终不变)的背包能装价值最大多少
+强制在线，k可以通过函数
+decode(int & k,int lastans){
+ k = k^lastans;
+}
+input:
+2 1 1
+1 1
+1 1
+1 
+output:
+1
