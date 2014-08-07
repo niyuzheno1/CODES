@@ -1,2 +1,0 @@
-bestdelta:7
-bestdiff:501

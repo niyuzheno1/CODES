@@ -1,0 +1,30 @@
+#include "mode.h"
+#include "spj.h"
+/*A :in
+  B :ans
+  C :out
+  D :res
+*/
+int main()
+{
+    setspj("numbers1");
+    int correct = 0;
+    int u = 0,v=0;
+    fr(B,"%d",&u);
+    fr(C,"%d",&v);
+    for(int i = 1;i<=60000;++i)
+    {
+     fr(B,"%d",&u);
+     fr(C,"%d",&v);
+    
+     if(u==v)
+      ++correct;
+     else
+     {
+      ff(D,"%d\n",i);
+     }
+    }
+    ff(D,"%d\n",correct);
+    closespj();
+    return 0;
+}
