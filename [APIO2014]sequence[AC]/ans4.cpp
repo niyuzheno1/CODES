@@ -25,19 +25,7 @@ qlst deq[MN];
 int l,r;
 bool gen(pii a,pii b,pii c){
      pii B = b-a,C = c-a;
-     if(B.X == 0)
-     {
-      if(B.Y == 0)
-       return 1;
-      return B.Y * C.X  <= 0;
-     }
-     if(C.X == 0)
-     {
-      if(C.Y == 0)
-       return 1;
-      return B.X * C.Y >= 0;
-     }
-     return C.Y / C.X <= B.Y / B.X;
+     return C.Y / C.X >= B.Y / B.X;
 }
 int main(int argc, char *argv[])
 {
@@ -69,7 +57,7 @@ int main(int argc, char *argv[])
       g[j][i] = 0; 
       }
       pii tmp = MP(s[j],f[j][now^1]);
-      while(r-l+1 >= 2 && det(deq[r-1].y,deq[r].y,tmp)>=0)
+      while(r-l+1 >= 2 && det(deq[r-1].y,deq[r].y,tmp) >=0)
        --r;
       ++r,deq[r].y = tmp,deq[r].x = j;
       f[j][now^1] = f[0][1];

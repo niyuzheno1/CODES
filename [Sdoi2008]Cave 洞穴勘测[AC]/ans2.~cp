@@ -1,0 +1,115 @@
+#include "mode.h"
+#include "iomgr.h"
+#define MN 10010
+int n,m;
+#define have(x) if(x != (node * )NULL)
+struct node{
+       node * ch[4];
+       bool rev;
+       void setw(node * b){ch[2] = b;}
+       void pd(){
+        if(rev){
+         swap(ch[0],ch[1]);
+         if(ch[0]!=(node*)NULL)ch[0]->rev ^= 1;
+         if(ch[1]!=(node*)NULL)ch[1]->rev ^= 1;
+         rev = 0;
+        }
+       }
+       void mkrt(){
+        rev = 1;
+        pd();
+       }
+       void upd(){
+       }
+       bool fd(node * u){
+        return (ch[0]==u)||(ch[1]==u);
+       }
+       int fdc(node * u){
+        return ch[0]==u?0:1;
+       }
+       bool isrt(){
+        return (ch[2] == 0)|| !ch[2]->fd(this);
+       }
+};
+node a[MN];
+#define rotate(x) { node * y = x->ch[2],* z = y->ch[2];\
+have(z) z->pd(); have(y) y->pd();  x->pd();\
+int d1 = (y->ch[0]==x),d2 = (y->isrt())?(3):(z->ch[1]==y);\
+y->ch[!d1] = x->ch[d1];have(y->ch[!d1]) y->ch[!d1]->setw(y);\
+x->ch[d1] = y ; y->setw(x);\
+if(z != (node*)NULL){z->ch[d2] = x ;} x->setw(z);\
+have(y) y->upd();x->upd();have(z) z->upd();\
+}\
+\
+
+
+#define splay(x){ while(!x->isrt()){\
+node * y = x->ch[2],*z = y->ch[2];\
+if(!y->isrt() && ((y->ch[1]==x) == (z->ch[1]==y)))\
+rotate(y);\
+rotate(x);\
+}\
+}\
+\
+
+#define lm(x){\
+while(x->ch[0] != (node *)NULL) x = x->ch[0];\
+ res1 = x;\
+}\
+\
+
+node * access(node * x){
+ node * res1 = (node * )NULL;
+ for(node * pre = 0,*now = x;now;){
+  splay(now);now->pd();
+  now->ch[1] = pre;
+  pre = now;now = now->ch[2];
+ }
+ splay(x);
+ lm(x);
+ return res1;
+}
+void link(node * x,node * y){
+ access(x); x->mkrt();
+ x->ch[2] = y;
+}
+void cut(node * x,node * y){
+ access(x);x->pd();splay(y);y->pd();
+  if(x->ch[2] != y || !y->fd(x))
+  {
+   access(y);y->pd();
+   x->ch[2] = (node * )NULL;
+   y->ch[y->fdc(x)] = (node *)NULL;
+   return;
+  }
+ splay(x);x->pd();
+ y->ch[2] = (node *) NULL;
+ x->ch[x->fdc(y)] = (node * )NULL;
+}
+
+bool query(node * x,node * y){
+ x = access(x);y = access(y);
+ return (x == y);
+}
+
+int times = 0;
+int main(int argc, char *argv[])
+{
+    setIO();
+    n = gi,m = gi;
+    for(int i = 1;i<=m;++i){
+     char opt =  gc;++times;
+     while(!((opt<='Z' && opt >= 'A') || opt == -1)) opt = gc;
+     int x=gi,y = gi;
+     if(opt == 'Q'){
+           
+            puts(query(a+x,a+y)?"Yes":"No");
+     }
+     if(opt == 'C')
+            link(a+x,a+y);
+     if(opt == 'D')
+            cut(a+x,a+y);
+    }
+    closeIO();
+    return EXIT_SUCCESS;
+}

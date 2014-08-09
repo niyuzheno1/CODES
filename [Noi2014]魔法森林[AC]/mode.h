@@ -33,12 +33,15 @@ ff(debug,"\n");\
 #define SIZE(a) a[0]
 #define INF  1000000010
 using namespace std;
+typedef  double ld;
 typedef long long int64;
 typedef unsigned long long uint64;
-typedef pair<int,int> pii;
+typedef pair<int,int> _reserve_type_1;
 typedef pair<int64,int64> pll;
+#define pii _reserve_type_1
 FILE * debug;
-void setIO(string file)
+#define setIO _func_2_
+void _func_2_(string file = "sample")
 {
  #ifndef ONLINE_JUDGE
  string input = file+".in",output = file+".out";freopen(input.c_str(),"r",stdin);freopen(output.c_str(),"w",stdout);debug = fopen("debug.txt","w");

@@ -1,5 +1,106 @@
-#include "mode.h"
-#include "str.h"
+#include <cstdlib>
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+#include <algorithm>
+#include <set>
+#include <map>
+#include <cmath>
+#include <queue>
+#include <stack>
+#include <string>
+#define show1D(_type,_array) for(int i = 0;i<=sizeof(_array)/sizeof(_type);++i)\
+ff(debug,"%d ",_array[i]);\
+ff(debug,"\n");\
+\
+
+
+#define TRA(x,y) for(int x = st[y];~x;x = lk[x].n) if(!lk[x].f)
+#define ff fprintf
+#define RENEW(x) if(x) delete[] x
+#define sqr(x) ((x)*(x))
+#define X first
+#define Y second
+#define gi getint()
+#define CLEAR(x,y) memset(x,y,sizeof(x))
+#define MP make_pair
+#define pb push_back
+#ifdef WIN32 
+#define I64D "%I64d"
+#else
+#define I64D "%lld"
+#endif
+#define SIZE(a) a[0]
+#define INF  1000000010
+using namespace std;
+typedef  double ld;
+typedef long long int64;
+typedef unsigned long long uint64;
+typedef pair<int,int> pii;
+typedef pair<int64,int64> pll;
+FILE * debug;
+void setIO(string file = "sample")
+{
+ #ifndef ONLINE_JUDGE
+ string input = file+".in",output = file+".out";freopen(input.c_str(),"r",stdin);freopen(output.c_str(),"w",stdout);debug = fopen("debug.txt","w");
+ #endif
+}
+void closeIO()
+{
+ #ifndef ONLINE_JUDGE
+ fclose(stdin);fclose(stdout);fclose(debug);
+ #endif
+}
+template <class T>
+void read(T & x)
+{
+ char tmp = 0; T flag = 1,ret = 0;while(tmp != '-' && !isdigit(tmp))tmp = getchar();
+ if(tmp == '-') flag = -1,tmp=getchar();while(isdigit(tmp)) ret*=10,ret += tmp-'0',tmp = getchar();
+ x = flag *ret;
+}
+
+int64 getint()
+{
+     int64 ret;read<int64>(ret);
+     return ret;
+}
+
+void endline()
+{
+     ff(debug,"\n");
+}
+
+inline int get(int * h,int * p,int i,int len){
+ int res = h[i+len-1];
+ if(i > 0) res -= h[i-1]*p[len];
+ return res;
+}
+inline int lcp(char * s,int * hl,int * p,const pii & a,const pii & b){
+ int l = 0,r = min(a.Y,b.Y)+1;//[,)
+ if(get(hl,p,a.X,r-1) == get(hl,p,b.X,r-1)) return r-1;
+ if(s[a.X] != s[a.X]) return 0;
+ while(r-l > 1){
+  int mid = ((l+r)>>1);
+  if(get(hl,p,a.X,mid) == get(hl,p,b.X,mid))
+   l = mid;
+  else
+   r = mid;
+ }
+ return l;
+}
+struct cmpSA{
+        int * hl,*p;
+        char * s;
+        bool operator() (const pii & a,const pii & b)
+        {
+         int mlen = min(a.Y,b.Y);
+         int l = lcp(s,hl,p,a,b);
+         if(l == mlen) return a.Y < b.Y;
+         return s[a.X+l] < s[b.X + l];
+        }
+        int slcp(const pii & a,const pii & b){return lcp(s,hl,p,a,b);}
+};
+
 #define MN 300003
 #define MC 600006
 typedef pii pi;

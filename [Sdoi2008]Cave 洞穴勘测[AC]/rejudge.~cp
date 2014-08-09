@@ -1,13 +1,13 @@
 #include "mode.h"
 
 using namespace std;
-#define TEST 67
+#define TEST 10
 char str[50];
 void gotou(int & x)
 {
-     sprintf(str,"cp %02d sample.in",x);
+     sprintf(str,"cp cave.%d.in sample.in",x);
      system(str);
-     sprintf(str,"cp %02d.a sample.ans",x);
+     sprintf(str,"cp cave.%d.out sample.ans",x);
      system(str);
 }
 int main(int argc, char *argv[])
@@ -15,14 +15,11 @@ int main(int argc, char *argv[])
     for(int i = 1;i<=TEST;++i)
     {
      gotou(i);
-     clock_t st , ed;
-     st = clock();
      system("ans");
-     ed = clock();
-     double dur = (double)(ed - st) / CLOCKS_PER_SEC;
-     printf( "%f seconds\n", dur );
-  
-     system("test sample.in sample.out sample.ans");
+     if(system("fc sample.ans sample.out"))
+      printf("WA:%d\n",i);
+     else
+      printf("AC\n");
      system("del sample.in");
      system("del sample.ans");
      system("del sample.out");
