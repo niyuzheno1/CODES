@@ -14,7 +14,7 @@ class iomgr{
  int fl;
 public:
  void setting(FILE * _A){
-	 A = _A;fl = 3145728;rb = new char[fl+3];fread(rb,1,fl,stdin);rb[fl] = -1;endb = rb+fl;
+	 A = _A;fl = 3*1024*1024;rb = new char[fl+3];fread(rb,1,fl,stdin);rb[fl] = -1;endb = rb+fl;
  }
  char exgetchar(){
 	char ret = *rb; ++rb;

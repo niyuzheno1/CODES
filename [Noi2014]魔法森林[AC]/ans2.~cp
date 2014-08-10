@@ -45,7 +45,7 @@ void operator << (_up & a,const _up & b){
 struct node{
  _down a;
  _up b,sf;
- set<_up> im;
+ //set<_up> im;
  node () {
   sf.a = -INF;sf.b = this; 
   upd();
@@ -58,9 +58,9 @@ struct node{
  void upd(){
      if(!have(this)) return;
      ++b;if(have(L)) b << L->b; if(have(R)) b << R->b;b << sf;
-     if(im.size() >= 1){
+     /*if(im.size() >= 1){
        b << *im.begin();
-     }
+     }*/
  }
  int fd(node * x){
      if(!have(this)) return -1;
@@ -122,8 +122,9 @@ node * lm(node * x){
 node* access(node * x){
   for(node * pre = 0,* now = x;now;){
   splay(now);now->pd();
-  if(have(now->R))now->im.insert(now->R->b);
-  if(have(pre))now->im.erase(pre->b);now->R = pre;
+  //if(have(now->R))now->im.insert(now->R->b);
+  //if(have(pre))now->im.erase(pre->b);
+  now->R = pre;
   pre = now;pre->upd();now = now->F;
   }
   splay(x);
@@ -134,7 +135,7 @@ void link2(node * a,node * b){
  a->mkrt();
  a->F = b;
  a->upd();
- a->F->im.insert(a->b);
+ //a->F->im.insert(a->b);
  access(a);
  a->sf.c = b;
 }
@@ -155,20 +156,29 @@ void cut(node * a,node * b,node * c){
  cut2(b,c);
 }
 bool same(node * a,node * b){
- a = access(a); b = access(b);
+ a = access(a); 
+ b = access(b);
+ 
  return a==b;
 }
 bool q1(node * a,node * b,int val){
- if(!same(a,b)){link(a,b,val); return 1;}
+ if(!same(a,b))
+ {
+	 link(a,b,val); 
+	 return 1;
+ }
  access(a);
  a->mkrt();
  access(b);
  b->pd();
  splay(a,b);a->pd();
- _up msg = a->b;
+  _up msg = empup;
+ if(have(a->R)) msg = a->R->b;
  if(msg.a > val){
   cut(msg.b->sf.d,msg.b->sf.e,msg.b);
-  link(a,b,val);
+  node * c = newnode(a,b,val);
+ link2(a,c);
+ link2(b,c); 
   return 1;
  }
  return 0;
@@ -185,7 +195,9 @@ int main(int argc, char *argv[])
     int ans1 = INF;
     int ln =  n;
     for(int i = 1;i<=m;++i){
-     
+	 if(i == 223)
+		  i = 223;
+     if(a[i].x == a[i].y) continue;
      int res = q1(c+a[i].x,c+a[i].y,a[i].b);
      access(c+ln); (c+ln)->mkrt();node * res1  = lm(c+ln);
      node * res2 = access(c+1); 

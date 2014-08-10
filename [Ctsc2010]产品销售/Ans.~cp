@@ -1,0 +1,79 @@
+#include "mode.h"
+#define MN 100010
+int n;
+int d[MN],p[MN],u[MN],m[MN],c[MN],fl[MN],ct[MN],fl1[MN];
+pii a[MN];
+int delta,cost;
+int main(int argc, char *argv[])
+{
+    setIO("sample");
+    n = gi;
+    for(int i = 1;i<=n;++i) d[i] = gi;
+    for(int i = 1;i<=n;++i) u[i] = gi;
+    for(int i = 1;i<=n;++i) p[i] = gi;
+    for(int i = 1;i<=n-1;++i) m[i] = gi;
+    for(int i = 1;i<=n-1;++i) c[i] = gi;
+    for(int i = 1;i<=n;++i) a[i] = MP(a[i-1].X+c[i-1],i);
+    for(int i = 1;i<=n;++i) a[i].X += p[i];
+    sort(a+1,a+n+1);
+    int j = 1;
+    for(int i = 1;i<=n;delta -= c[i],++i){
+     if(i == 2)
+      i = 2;
+     while(d[i] > 0)
+     {
+      int forward = INF,backward = INF,cc=0;
+      if(j <= n){
+      while(j<= n && (a[j].Y <i || (u[a[j].Y] == 0)))
+       ++j;
+      if(j <= n)
+      forward = a[j].X+delta;
+      }
+      for(int k = i-1;k>=1;--k)
+       if(backward > ct[k]+p[k])
+       {
+        backward = ct[k]+p[k];
+        cc = k;
+       }
+      if(forward < backward){
+        int mcap = min(u[a[j].Y],d[i]);
+        u[a[j].Y] -= mcap,d[i] -= mcap;
+        cost += forward * mcap;
+        for(int k = i;k<a[j].Y;++k) 
+         fl1[k]+=mcap;
+      }else{
+       int mcap = min(u[cc],d[i]);
+       for(int k = cc;k<i;++k)
+        mcap = min(mcap,fl[k]);
+       for(int k = cc;k<i;++k)
+        fl[k] -= mcap;
+       
+       int ncost = backward;
+       u[cc] -= mcap,d[i] -= mcap;
+       if(u[cc] == 0) ct[cc] = INF;
+       cost += ncost * mcap;
+       for(int k = cc;k<i;++k)
+        if(fl[k] == 0 )
+        {
+        int delta = c[k]+m[k];
+        fl[k] = INF;
+        for(int o = k;o>=1;--o)
+         ct[o] += delta;
+        }
+      }
+     }
+     if(fl1[i] > 0 )
+      {
+       fl[i] = fl1[i];
+       for(int k = 1;k<=i;++k)
+        ct[k] += -c[i];
+      }else{
+       fl[i] = INF;
+       for(int k = 1;k<=i;++k)
+        ct[k] += m[i];
+      }
+    }
+    printf("%d\n",cost);
+    closeIO();
+    return EXIT_SUCCESS;
+}

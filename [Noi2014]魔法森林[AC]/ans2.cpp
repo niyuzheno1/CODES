@@ -1,4 +1,5 @@
 #include "mode.h"
+#include "iomgr.h"
 int n,m;
 #define MN 50010
 #define MM 100010
@@ -195,8 +196,6 @@ int main(int argc, char *argv[])
     int ans1 = INF;
     int ln =  n;
     for(int i = 1;i<=m;++i){
-	 if(i == 223)
-		  i = 223;
      if(a[i].x == a[i].y) continue;
      int res = q1(c+a[i].x,c+a[i].y,a[i].b);
      access(c+ln); (c+ln)->mkrt();node * res1  = lm(c+ln);

@@ -1,0 +1,44 @@
+#include "mode.h"
+#include "iodata.h"
+
+using namespace std;
+int n;
+#define mk 11
+int main(int argc, char *argv[])
+{
+    init("sample.in");
+    n = 5;
+    pli(n);
+    int tmp = 0,cc = INF;
+    for(int i = 1;i<=n;++i){ 
+            int x = rand()%mk+1;
+            pin_(x);
+            tmp += x;
+            cc = min(cc,x);
+    }
+    nl();
+    int u = 0;
+    for(int i = 1;i<=n-1;++i){
+          int x = rand()%cc+1;
+          pin_(x);
+          u += x;
+    }
+    if(tmp-u == 0){
+     pin_(0);
+    }
+    else
+    pin_(rand()%(tmp-u));
+    nl();
+    for(int i = 1;i<=n;++i)
+     pin_(rand()%mk+1);
+    nl();
+    for(int i = 1;i<=n-1;++i)
+     pin_(rand()%mk+1);
+    nl();
+    for(int i = 1;i<=n-1;++i)
+     pin_(rand()%mk+1);
+    nl();
+    
+    closeIO();
+    return EXIT_SUCCESS;
+}
