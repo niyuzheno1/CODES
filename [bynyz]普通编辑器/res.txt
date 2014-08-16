@@ -1,0 +1,26 @@
+init realtime : 0.0180000
+subtack1 realtime:0.0330000
+subtack2 realtime:0.0340000
+Insert realtime:3.7620000
+subtack3 realtime:0.0390000
+query realtime:0.0100000
+当我完善merge的时候，merge(l,r),|l|=4*k,|r| = 2,发现maintain操作数取到最大值。
+于是我列出一组|l|,|r|,当|l| = 4,|r| = 2时，maintain函数对于l中3号点效果不是很好，如图:
+      2
+    /   \ 
+   1     3
+          \
+           5
+          / \ 
+         4   6
+很明显对3号点maintain会出事的，但对2号点maintain就万事大吉。
+于是我做了调整，但接下来的事更让我摸不着头脑。
+我取了|l|=5,|r| = 3.发现maintain次数是5>3,
+很明显我的merge错了，但是
+|l|=5,|r| = 3 如图:
+    2              7
+   /  \          /   \
+  1    4        6     8
+      /  \
+     3    5
+应该把|r|接在5节点后边，但是这样做的话一点依据都没有，所以就呵呵了。

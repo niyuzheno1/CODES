@@ -1,7 +1,7 @@
 #include "mode.h"
 #include "data.h"
 #define SIZE(a) a[0]
-#define MN 5010
+#define MN 3000010
 int o1[MN],o2[MN],cnt[MN],qt[MN],t1,low;
 #define LEF(_t) o1[_t]
 #define RIG(_t) o2[_t]
@@ -9,8 +9,6 @@ int o1[MN],o2[MN],cnt[MN],qt[MN],t1,low;
 void mkc(TREE2,int x,int c)
 {
      int p = ++t1;
-     if(p == 38) 
-      p = 38;
      if(_t != 0) LEF(p) = LEF(_t),RIG(p) = RIG(_t);
      S(p)=S(_t)+c;
      _t = p;if(_l == _r) return ;
@@ -36,7 +34,7 @@ int query(int k)
 #undef RIG
 #undef MN
 //part 2
-#define MN 5010
+#define MN 3000010
 int a[MN],o3[MN],o4[MN],t[MN],t2;
 #define LEF(_t) o3[_t]
 #define RIG(_t) o4[_t]

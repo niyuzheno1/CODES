@@ -1,0 +1,4 @@
+size:1 key:1 lkey:0 rkey:0
+size:4 key:2 lkey:1 rkey:3
+size:2 key:3 lkey:0 rkey:4
+size:1 key:4 lkey:0 rkey:0
